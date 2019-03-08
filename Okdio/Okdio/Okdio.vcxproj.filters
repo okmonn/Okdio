@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Loader">
+      <UniqueIdentifier>{15b90c25-371c-43f4-baa6-1d4722f08ac8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WAVE">
+      <UniqueIdentifier>{45d3e869-8c34-4ed2-b753-4ee43a73a255}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XAudio2">
+      <UniqueIdentifier>{bc918cc7-9c9c-4b1e-8d21-842db715753f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Okdio">
+      <UniqueIdentifier>{efd2f50d-5df9-47c4-a49b-c050c0d2d221}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Okdio\WAVE\WAVE.cpp">
+      <Filter>WAVE</Filter>
+    </ClCompile>
+    <ClCompile Include="Okdio\SoundLoader\SoundLoader.cpp">
+      <Filter>Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="Okdio\XAudio2\XAudio2.cpp">
+      <Filter>XAudio2</Filter>
+    </ClCompile>
+    <ClCompile Include="Okdio\Okdio.cpp">
+      <Filter>Okdio</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Okdio\SoundLoader\SoundLoader.h">
+      <Filter>Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\WAVE\WAVE.h">
+      <Filter>WAVE</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\SoundInfo.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\XAudio2\XAudio2.h">
+      <Filter>XAudio2</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\Okdio.h">
+      <Filter>Okdio</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
