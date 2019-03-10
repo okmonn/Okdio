@@ -25,6 +25,9 @@
     <Filter Include="Okdio">
       <UniqueIdentifier>{efd2f50d-5df9-47c4-a49b-c050c0d2d221}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Effector">
+      <UniqueIdentifier>{b487651d-bac9-4c0c-a95c-d8c2db220fc4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -42,6 +45,9 @@
     <ClCompile Include="Okdio\Okdio.cpp">
       <Filter>Okdio</Filter>
     </ClCompile>
+    <ClCompile Include="Okdio\Effector\Effector.cpp">
+      <Filter>Effector</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Okdio\SoundLoader\SoundLoader.h">
@@ -58,6 +64,9 @@
     </ClInclude>
     <ClInclude Include="Okdio\Okdio.h">
       <Filter>Okdio</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\Effector\Effector.h">
+      <Filter>Effector</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -128,12 +128,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Okdio\Effector\Effector.cpp" />
     <ClCompile Include="Okdio\Okdio.cpp" />
     <ClCompile Include="Okdio\SoundLoader\SoundLoader.cpp" />
     <ClCompile Include="Okdio\WAVE\WAVE.cpp" />
     <ClCompile Include="Okdio\XAudio2\XAudio2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Okdio\Effector\Effector.h" />
     <ClInclude Include="Okdio\Okdio.h" />
     <ClInclude Include="Okdio\SoundInfo.h" />
     <ClInclude Include="Okdio\SoundLoader\SoundLoader.h" />
