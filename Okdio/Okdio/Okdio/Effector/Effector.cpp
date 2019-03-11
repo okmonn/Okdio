@@ -34,9 +34,9 @@ void Effector::Stream(void)
 			continue;
 		}
 
-		for (float& i : (*queue.begin())->wave)
+		for (float& i : (*queue.begin())->wave[(*queue.begin())->index])
 		{
-			i = 0.0f;
+			i = i;
 		}
 
 		SetEvent((*queue.begin())->handle);

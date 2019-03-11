@@ -1,5 +1,6 @@
 #pragma once
 #include "SoundInfo.h"
+#include <list>
 #include <string>
 #include <vector>
 #include <optional>
@@ -25,7 +26,7 @@ public:
 	int Load(const std::string& fileName);
 
 	// 再生
-	long Play(const bool& loop = false);
+	long Play(const bool& loop = false, const bool& multiple = false);
 
 	// 停止
 	long Stop(void);
@@ -80,6 +81,9 @@ private:
 	// サウンド情報
 	snd::Info info;
 
+	// バッファ入れ替え用インデックス
+	unsigned int index;
+
 	// 再生呼び出し回数
 	unsigned int cnt;
 
@@ -87,10 +91,10 @@ private:
 	bool loop;
 
 	// 読み込み位置
-	std::vector<unsigned int>read;
+	std::list<unsigned int>read;
 
 	// 波形データ
-	std::vector<float>wave;
+	std::vector<std::vector<float>>wave;
 
 	void* handle;
 };

@@ -13,7 +13,7 @@ int main()
 		{
 			if (key == false)
 			{
-				s.Play();  
+				s.Play(false, true);  
 				key = true;
 			}
 		}
