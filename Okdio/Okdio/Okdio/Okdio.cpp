@@ -265,7 +265,6 @@ inline constexpr unsigned int Okdio::Bps(void) const
 // データ読み込み前に呼び出し
 void __stdcall Okdio::OnVoiceProcessingPassStart(unsigned int SamplesRequired)
 {
-	printf("%s\n", __func__);
 	WaitForSingleObject(handle, INFINITE);
 	Submit();
 }
@@ -273,21 +272,18 @@ void __stdcall Okdio::OnVoiceProcessingPassStart(unsigned int SamplesRequired)
 // 新しいバッファの処理開始時に呼び出し
 void __stdcall Okdio::OnBufferStart(void* pBufferContext)
 {
-	printf("%s\n", __func__);
 	UpData();
 }
 
 // バッファの処理終了時に呼び出し
 void __stdcall Okdio::OnBufferEnd(void* pBufferContext)
 {
-	printf("%s\n", __func__);
 	CheckEnd();
 }
 
 // 音声の処理パス終了時に呼び出し
 void __stdcall Okdio::OnVoiceProcessingPassEnd()
 {
-	printf("%s\n", __func__);
 	Reset();
 }
 

@@ -3,8 +3,17 @@
 
 int main()
 {
-	Okdio s("sample.wav");
-	s.Play();
+	std::vector<Okdio>s(10);
+	for (auto& i : s)
+	{
+		i.Load("mtgx.wav");
+	}
+	
+	for (auto& i : s)
+	{
+		i.Play();
+		Sleep(10000);
+	}
 
 	bool key = false;
 	while (!(GetKeyState(VK_ESCAPE) & 0x80))
@@ -13,7 +22,6 @@ int main()
 		{
 			if (key == false)
 			{
-				s.Play(false, true);  
 				key = true;
 			}
 		}
