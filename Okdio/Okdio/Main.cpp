@@ -3,7 +3,7 @@
 
 int main()
 {
-	Okdio s("mtgx.wav");
+	Okdio s("sample.wav");
 	s.Play();
 
 	bool key = false;

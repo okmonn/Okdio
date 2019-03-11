@@ -106,6 +106,11 @@ void Okdio::UpData(void)
 			? Bps()
 			: unsigned int(SoundLoader::Get().Wave(name.value())->size()) - i - 1;
 
+		if (i + size >= SoundLoader::Get().Wave(name.value())->size())
+		{
+			continue;
+		}
+
 		std::transform(&SoundLoader::Get().Wave(name.value())->at(i), &SoundLoader::Get().Wave(name.value())->at(i + size), wave[index].begin(), wave[index].begin(), std::plus<float>());
 	}
 
@@ -225,7 +230,7 @@ void Okdio::Reset(void)
 	{
 		Stop();
 		read.push_back(0);
-		cnt = 0;
+		cnt = 1;
 	}
 }
 
@@ -260,6 +265,7 @@ inline constexpr unsigned int Okdio::Bps(void) const
 // データ読み込み前に呼び出し
 void __stdcall Okdio::OnVoiceProcessingPassStart(unsigned int SamplesRequired)
 {
+	printf("%s\n", __func__);
 	WaitForSingleObject(handle, INFINITE);
 	Submit();
 }
@@ -267,18 +273,21 @@ void __stdcall Okdio::OnVoiceProcessingPassStart(unsigned int SamplesRequired)
 // 新しいバッファの処理開始時に呼び出し
 void __stdcall Okdio::OnBufferStart(void* pBufferContext)
 {
+	printf("%s\n", __func__);
 	UpData();
 }
 
 // バッファの処理終了時に呼び出し
 void __stdcall Okdio::OnBufferEnd(void* pBufferContext)
 {
+	printf("%s\n", __func__);
 	CheckEnd();
 }
 
 // 音声の処理パス終了時に呼び出し
 void __stdcall Okdio::OnVoiceProcessingPassEnd()
 {
+	printf("%s\n", __func__);
 	Reset();
 }
 
