@@ -1,18 +1,13 @@
 #pragma once
 #include "SoundInfo.h"
-#include <list>
 #include <string>
 #include <vector>
 #include <optional>
 #include <xaudio2.h>
 
-class Effector;
-
-// サウンド
-class Okdio : 
+class Okdio :
 	public IXAudio2VoiceCallback
 {
-	friend Effector;
 public:
 	// コンストラクタ
 	Okdio();
@@ -26,12 +21,12 @@ public:
 	int Load(const std::string& fileName);
 
 	// 再生
-	long Play(const bool& loop = false, const bool& multiple = false);
+	long Play(const bool& loop = false);
 
 	// 停止
 	long Stop(void);
 
-	// 代入演算子
+	// 代入
 	void operator=(const Okdio& okdio);
 
 private:
@@ -41,7 +36,7 @@ private:
 	// ソースボイス生成
 	long CreateVoice(void);
 
-	// 波形更新
+	// 波形データ更新
 	void UpData(void);
 
 	// バッファに追加
@@ -50,10 +45,10 @@ private:
 	// 終了確認
 	void CheckEnd(void);
 
-	// リセット
+	// 波形読み込みのリセット
 	void Reset(void);
 
-	// 一回の処理データサイズ
+	// 一回の処理データ取得
 	inline constexpr unsigned int Bps(void) const;
 
 	// データ読み込み前に呼び出し
@@ -65,36 +60,37 @@ private:
 	// 音声の処理パス終了時に呼び出し
 	void __stdcall OnVoiceProcessingPassEnd();
 	// 連続したストリーム再生終了時に呼び出し
-	void __stdcall OnStreamEnd();
+	void __stdcall OnStreamEnd() {}
 	// ループ終了位置到達時に呼び出し
-	void __stdcall OnLoopEnd(void* pBufferContext);
+	void __stdcall OnLoopEnd(void* pBufferContext) {}
 	// エラー発生時に呼び出し
-	void __stdcall OnVoiceError(void* pBufferContext, long Error);
+	void __stdcall OnVoiceError(void* pBufferContext, long Error) {}
 
 
 	// ソースボイス
 	IXAudio2SourceVoice* voice;
 
-	// 参照ファイルパス
+	// 参照ファイル名
 	std::optional<std::string>name;
-
-	// サウンド情報
-	snd::Info info;
 
 	// バッファ入れ替え用インデックス
 	unsigned int index;
 
-	// 再生呼び出し回数
+	// 
 	unsigned int cnt;
 
 	// ループフラグ
 	bool loop;
 
+	// エフェクト処理完了ハンドル
+	void* handle;
+
+	// サウンド情報
+	snd::Info info;
+
 	// 読み込み位置
-	std::list<unsigned int>read;
+	std::vector<unsigned int>read;
 
 	// 波形データ
 	std::vector<std::vector<float>>wave;
-
-	void* handle;
 };

@@ -36,13 +36,13 @@ void Effector::Stream(void)
 
 		for (auto itr = queue.begin(); itr != queue.end();)
 		{
-			for (float& i : (*itr)->wave[(*itr)->index])
+			/*for (float& i : (*itr)->wave[(*itr)->index])
 			{
 				i *= 2.0f;
 			}
 
 			SetEvent((*itr)->handle);
-			itr = queue.erase(itr);
+			itr = queue.erase(itr);*/
 		}
 	}
 }
