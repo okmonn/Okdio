@@ -38,6 +38,13 @@ Okdio::Okdio(const std::string & fileName)
 	Load(fileName);
 }
 
+// コンストラクタ
+Okdio::Okdio(const snd::Info& info, const std::vector<float>& data)
+{
+	Init();
+	SetInfo(info, data);
+}
+
 // コピーコンストラクタ
 Okdio::Okdio(const Okdio& okdio)
 {
@@ -63,6 +70,14 @@ void Okdio::Init(void)
 
 	read.push_back(0);
 	wave.resize(BUFFER);
+
+	EffeInit();
+}
+
+// エフェクトパラメータ初期化
+void Okdio::EffeInit(void)
+{
+	memset(&inout[0], 0, sizeof(inout));
 }
 
 // ソースボイス生成
@@ -112,6 +127,35 @@ int Okdio::Load(const std::string& fileName)
 	return 0;
 }
 
+// オリジナル情報セット
+int Okdio::SetInfo(const snd::Info& info, const std::vector<float>& data)
+{
+	this->info = info;
+
+	if (FAILED(CreateVoice()))
+	{
+		return -1;
+	}
+
+	original = data;
+
+	UpData();
+
+	return 0;
+}
+
+// エフェクトセット
+void Okdio::SetEffect(const std::vector<snd::Effect>& types)
+{
+	type = types;
+}
+
+// エフェクト追加
+void Okdio::AddEffect(const snd::Effect& type)
+{
+	this->type.push_back(type);
+}
+
 // 再生
 long Okdio::Play(const bool& loop)
 {
@@ -153,18 +197,26 @@ long Okdio::Stop(void)
 void Okdio::UpData(void)
 {
 	wave[index].assign(Bps(), 0.0f);
+
+	//データ全体サイズ
+	const unsigned int dataSize = (name != std::nullopt)
+		? unsigned int(SoundLoader::Get().Wave(name.value())->size())
+		: unsigned int(original.size());
+
 	for (unsigned int& i : read)
 	{
 		//残りサイズ計算
-		unsigned int size = unsigned int(SoundLoader::Get().Wave(name.value())->size()) - i >= Bps()
-			? Bps()
-			: unsigned int(SoundLoader::Get().Wave(name.value())->size()) - i - 1;
-		if (i + size >= SoundLoader::Get().Wave(name.value())->size())
+		unsigned int size = (dataSize - i >= Bps()) ? Bps() : dataSize - i;
+		if (i + size >= dataSize)
 		{
 			continue;
 		}
 
-		std::transform(&SoundLoader::Get().Wave(name.value())->at(i), &SoundLoader::Get().Wave(name.value())->at(i + size), wave[index].begin(), wave[index].begin(), std::plus<float>());
+		std::vector<float>origin = (name != std::nullopt)
+			? std::vector<float>(&SoundLoader::Get().Wave(name.value())->at(i), &SoundLoader::Get().Wave(name.value())->at(i + size))
+			: std::vector<float>(&original[i], &original[i + size]);
+
+		std::transform(origin.begin(), origin.end(), wave[index].begin(), wave[index].begin(), std::plus<float>());
 	}
 }
 
@@ -196,9 +248,14 @@ long Okdio::Submit(void)
 // 終了確認
 void Okdio::CheckEnd(void)
 {
-	for (auto itr = read.begin(); itr != read.end();)
+	//データ全体サイズ
+	const unsigned int dataSize = (name != std::nullopt)
+		? unsigned int(SoundLoader::Get().Wave(name.value())->size())
+		: unsigned int(original.size());
+
+	for (std::vector<unsigned int>::iterator itr = read.begin(); itr != read.end();)
 	{
-		if ((*itr) >= SoundLoader::Get().Wave(name.value())->size())
+		if ((*itr) >= dataSize)
 		{
 			if (loop == false)
 			{
@@ -234,14 +291,17 @@ void Okdio::operator=(const Okdio& okdio)
 		return;
 	}
 
-	name   = okdio.name;
-	index  = 0;
-	cnt    = 0;
-	loop   = false;
-	handle = CreateEventEx(nullptr, false, false, EVENT_ALL_ACCESS);
+	name     = okdio.name;
+	index    = 0;
+	cnt      = 0;
+	loop     = false;
+	handle   = CreateEventEx(nullptr, false, false, EVENT_ALL_ACCESS);
+	original = okdio.original;
 
 	read.assign(1, 0);
 	wave.resize(BUFFER);
+
+	EffeInit();
 
 	UpData();
 }

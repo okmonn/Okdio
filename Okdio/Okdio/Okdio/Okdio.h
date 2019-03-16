@@ -12,6 +12,7 @@ public:
 	// コンストラクタ
 	Okdio();
 	Okdio(const std::string& fileName);
+	Okdio(const snd::Info& info, const std::vector<float>& data);
 	// コピーコンストラクタ
 	Okdio(const Okdio& okdio);
 	// デストラクタ
@@ -19,6 +20,15 @@ public:
 
 	// 読み込み
 	int Load(const std::string& fileName);
+
+	// オリジナル情報セット
+	int SetInfo(const snd::Info& info, const std::vector<float>& data);
+
+	// エフェクトセット
+	void SetEffect(const std::vector<snd::Effect>& types);
+
+	// エフェクト追加
+	void AddEffect(const snd::Effect& type);
 
 	// 再生
 	long Play(const bool& loop = false);
@@ -32,6 +42,9 @@ public:
 private:
 	// 初期化
 	void Init(void);
+
+	// エフェクトパラメータ初期化
+	void EffeInit(void);
 
 	// ソースボイス生成
 	long CreateVoice(void);
@@ -76,7 +89,7 @@ private:
 	// バッファ入れ替え用インデックス
 	unsigned int index;
 
-	// 
+	// 重ねがけ回数
 	unsigned int cnt;
 
 	// ループフラグ
@@ -88,9 +101,18 @@ private:
 	// サウンド情報
 	snd::Info info;
 
+	// オリジナル波形データ
+	std::vector<float>original;
+
 	// 読み込み位置
 	std::vector<unsigned int>read;
 
 	// 波形データ
 	std::vector<std::vector<float>>wave;
+
+	// エフェクト適応一覧
+	std::vector<snd::Effect>type;
+
+	// フィルタ用入出力値
+	float inout[2][2];
 };

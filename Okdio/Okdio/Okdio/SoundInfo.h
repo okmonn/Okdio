@@ -28,4 +28,10 @@ namespace snd
 			channel = value;
 		}
 	};
+
+	// エフェクトタイプ
+	enum Effect {
+		//ローパス
+		LowPass,
+	};
 }

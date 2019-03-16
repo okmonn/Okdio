@@ -28,6 +28,12 @@
     <Filter Include="Effector">
       <UniqueIdentifier>{b487651d-bac9-4c0c-a95c-d8c2db220fc4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Filter">
+      <UniqueIdentifier>{fe962891-63f0-46b7-baa0-9b90743fe521}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Func">
+      <UniqueIdentifier>{07eba843-56c7-4013-9dee-c8f29caa708c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -45,8 +51,11 @@
     <ClCompile Include="Okdio\Okdio.cpp">
       <Filter>Okdio</Filter>
     </ClCompile>
-    <ClCompile Include="Okdio\Effector\Effector.cpp">
-      <Filter>Effector</Filter>
+    <ClCompile Include="Okdio\Filter\Filter.cpp">
+      <Filter>Filter</Filter>
+    </ClCompile>
+    <ClCompile Include="Okdio\SoundFunc\SoundFunc.cpp">
+      <Filter>Func</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -65,8 +74,11 @@
     <ClInclude Include="Okdio\Okdio.h">
       <Filter>Okdio</Filter>
     </ClInclude>
-    <ClInclude Include="Okdio\Effector\Effector.h">
-      <Filter>Effector</Filter>
+    <ClInclude Include="Okdio\Filter\Filter.h">
+      <Filter>Filter</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\SoundFunc\SoundFunc.h">
+      <Filter>Func</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
