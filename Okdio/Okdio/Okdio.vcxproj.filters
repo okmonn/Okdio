@@ -57,6 +57,9 @@
     <ClCompile Include="Okdio\SoundFunc\SoundFunc.cpp">
       <Filter>Func</Filter>
     </ClCompile>
+    <ClCompile Include="Okdio\Effector\Effector.cpp">
+      <Filter>Effector</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Okdio\SoundLoader\SoundLoader.h">
@@ -79,6 +82,9 @@
     </ClInclude>
     <ClInclude Include="Okdio\SoundFunc\SoundFunc.h">
       <Filter>Func</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\Effector\Effector.h">
+      <Filter>Effector</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

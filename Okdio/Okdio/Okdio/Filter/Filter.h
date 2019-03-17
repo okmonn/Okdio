@@ -15,6 +15,7 @@ public:
 
 	// é¿çs
 	void Execution(std::vector<float>& data, float* input, float* output);
+	void Execution(float& data, float* input, float* output);
 
 private:
 	Filter(const Filter&) = delete;

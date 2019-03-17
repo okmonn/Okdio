@@ -29,9 +29,19 @@ namespace snd
 		}
 	};
 
+	// デジタルフィルタパラメータ
+	struct FilterParam {
+		//カットオフ周波数
+		float cutoff;
+		//帯域幅・クオリティファクタ
+		float bw;
+	};
+
 	// エフェクトタイプ
 	enum Effect {
 		//ローパス
 		LowPass,
+		//ボリューム
+		Volume,
 	};
 }

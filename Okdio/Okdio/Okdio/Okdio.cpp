@@ -1,6 +1,7 @@
 #include "Okdio.h"
 #include "XAudio2/XAudio2.h"
 #include "SoundLoader/SoundLoader.h"
+#include "SoundFunc/SoundFunc.h"
 #include <ks.h>
 #include <tchar.h>
 #include <algorithm>
@@ -27,6 +28,13 @@ const unsigned long spk[] = {
 
 // コンストラクタ
 Okdio::Okdio()
+{
+	Init();
+}
+
+// コンストラクタ
+Okdio::Okdio(std::weak_ptr<Effector> effe) : 
+	effe(effe)
 {
 	Init();
 }
@@ -78,6 +86,8 @@ void Okdio::Init(void)
 void Okdio::EffeInit(void)
 {
 	memset(&inout[0], 0, sizeof(inout));
+	filter = { 10.0f, 1.0f / std::sqrt(2.0f) };
+	volume = 1.0f;
 }
 
 // ソースボイス生成
@@ -144,10 +154,37 @@ int Okdio::SetInfo(const snd::Info& info, const std::vector<float>& data)
 	return 0;
 }
 
-// エフェクトセット
-void Okdio::SetEffect(const std::vector<snd::Effect>& types)
+// デジタルフィルタパラメータセット
+bool Okdio::SetFilterParam(const float& cutoff, const float& bw)
 {
-	type = types;
+	if (bw <= 0.0f
+		|| cutoff < 10.0f || snd::Floor(float(info.sample / 2), 3) < cutoff)
+	{
+		return false;
+	}
+
+	filter = { cutoff, bw };
+
+	return true;
+}
+
+// ボリュームセット
+bool Okdio::SetVolume(const float& volume)
+{
+	if (volume < 0.0f)
+	{
+		return false;
+	}
+
+	this->volume = volume;
+
+	return true;
+}
+
+// エフェクトセット
+void Okdio::SetEffect(const std::initializer_list<snd::Effect>& type)
+{
+	this->type = type;
 }
 
 // エフェクト追加
@@ -217,6 +254,11 @@ void Okdio::UpData(void)
 			: std::vector<float>(&original[i], &original[i + size]);
 
 		std::transform(origin.begin(), origin.end(), wave[index].begin(), wave[index].begin(), std::plus<float>());
+	}
+
+	if (!effe.expired())
+	{
+		effe.lock()->AddQueue(this);
 	}
 }
 
@@ -312,9 +354,20 @@ inline constexpr unsigned int Okdio::Bps(void) const
 	return info.sample * info.channel / OFFSET;
 }
 
+// 現在の波形データ
+std::vector<float>& Okdio::Wave(void)
+{
+	return wave[index];
+}
+
 // データ読み込み前に呼び出し
 void __stdcall Okdio::OnVoiceProcessingPassStart(unsigned int SamplesRequired)
 {
+	if (!effe.expired())
+	{
+		WaitForSingleObject(handle, INFINITE);
+	}
+
 	Submit();
 }
 

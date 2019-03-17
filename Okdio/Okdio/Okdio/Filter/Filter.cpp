@@ -53,3 +53,25 @@ void Filter::Execution(std::vector<float>& data, float* input, float* output)
 		output[0] = i;
 	}
 }
+
+// 実行
+void Filter::Execution(float& data, float* input, float* output)
+{
+	//入力値保持
+	float tmp = data;
+
+	//適応
+	data = b[0] / a[0] * tmp
+		 + b[1] / a[0] * input[0]
+		 + b[2] / a[0] * input[1]
+		 - a[1] / a[0] * output[0]
+		 - a[2] / a[0] * output[1];
+
+	//過去入力値更新
+	input[1] = input[0];
+	input[0] = tmp;
+
+	//過去出力値更新
+	output[1] = output[0];
+	output[0] = data;
+}

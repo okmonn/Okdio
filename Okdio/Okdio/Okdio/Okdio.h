@@ -1,16 +1,20 @@
 #pragma once
 #include "SoundInfo.h"
+#include "Effector/Effector.h"
 #include <string>
 #include <vector>
 #include <optional>
 #include <xaudio2.h>
+#include <memory>
 
 class Okdio :
 	public IXAudio2VoiceCallback
 {
+	friend Effector;
 public:
 	// コンストラクタ
 	Okdio();
+	Okdio(std::weak_ptr<Effector>effe);
 	Okdio(const std::string& fileName);
 	Okdio(const snd::Info& info, const std::vector<float>& data);
 	// コピーコンストラクタ
@@ -24,8 +28,14 @@ public:
 	// オリジナル情報セット
 	int SetInfo(const snd::Info& info, const std::vector<float>& data);
 
+	// デジタルフィルタパラメータセット
+	bool SetFilterParam(const float& cutoff, const float& bw = 1.0f / std::sqrt(2.0f));
+
+	// ボリュームセット
+	bool SetVolume(const float& volume);
+
 	// エフェクトセット
-	void SetEffect(const std::vector<snd::Effect>& types);
+	void SetEffect(const std::initializer_list<snd::Effect>& type);
 
 	// エフェクト追加
 	void AddEffect(const snd::Effect& type);
@@ -64,6 +74,9 @@ private:
 	// 一回の処理データ取得
 	inline constexpr unsigned int Bps(void) const;
 
+	// 現在の波形データ
+	std::vector<float>& Wave(void);
+
 	// データ読み込み前に呼び出し
 	void __stdcall OnVoiceProcessingPassStart(unsigned int SamplesRequired);
 	// 新しいバッファの処理開始時に呼び出し
@@ -79,6 +92,9 @@ private:
 	// エラー発生時に呼び出し
 	void __stdcall OnVoiceError(void* pBufferContext, long Error) {}
 
+
+	// エフェクター
+	std::weak_ptr<Effector>effe;
 
 	// ソースボイス
 	IXAudio2SourceVoice* voice;
@@ -113,6 +129,12 @@ private:
 	// エフェクト適応一覧
 	std::vector<snd::Effect>type;
 
-	// フィルタ用入出力値
+	// デジタルフィルタ用入出力値
 	float inout[2][2];
+
+	// デジタルフィルタパラメータ
+	snd::FilterParam filter;
+
+	// ボリューム
+	float volume;
 };
