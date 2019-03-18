@@ -37,10 +37,26 @@ namespace snd
 		float bw;
 	};
 
+	// 圧縮系パラメータ
+	struct CompParam {
+		//閾値
+		float threshold;
+		//レシオ
+		float ratio;
+	};
+
 	// エフェクトタイプ
 	enum Effect {
 		//ローパス
 		LowPass,
+		//ハイパス
+		HighPass,
+		//バンドパス
+		BandPass,
+		//リミッター
+		Limiter,
+		//コンプレッサー
+		Comp,
 		//ボリューム
 		Volume,
 	};

@@ -11,6 +11,7 @@
 
 class Okdio;
 class Filter;
+class Comp;
 
 // サウンドエフェクター
 class Effector
@@ -34,6 +35,18 @@ private:
 	// ローパスフィルタ実行
 	void LowPass(Okdio* okdio);
 
+	// ハイパスフィルタ実行
+	void HighPass(Okdio* okdio);
+
+	// バンドパス実行
+	void BandPass(Okdio* okdio);
+
+	// リミッター実行
+	void Limiter(Okdio* okdio);
+
+	// コンプレッサー実行
+	void Compressor(Okdio* okdio);
+
 	// ボリューム実行
 	void Volume(Okdio* okdio);
 
@@ -46,6 +59,9 @@ private:
 
 	// フィルター
 	std::unique_ptr<Filter>filter;
+
+	// 圧縮系
+	std::unique_ptr<Comp>comp;
 
 	// スレッドフラグ
 	bool threadFlag;

@@ -37,6 +37,9 @@
     <Filter Include="Effector\Queue">
       <UniqueIdentifier>{290519b0-04bc-4f08-a2b2-78d08681a83c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Comp">
+      <UniqueIdentifier>{190f3c5d-4450-4b91-ab15-4c228a48b1c4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -62,6 +65,9 @@
     </ClCompile>
     <ClCompile Include="Okdio\Effector\Effector.cpp">
       <Filter>Effector</Filter>
+    </ClCompile>
+    <ClCompile Include="Okdio\Comp\Comp.cpp">
+      <Filter>Comp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -91,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="Okdio\Effector\Queue.h">
       <Filter>Effector\Queue</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\Comp\Comp.h">
+      <Filter>Comp</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

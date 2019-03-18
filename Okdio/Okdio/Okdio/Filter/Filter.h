@@ -13,9 +13,29 @@ public:
 	// ローパス
 	void LowPass(const unsigned int& sample, const float& cutoff, const float& q);
 
+	// ハイパス
+	void HighPass(const unsigned int& sample, const float& cutoff, const float& q);
+
+	// バンドパス
+	void BandPass(const unsigned int& sample, const float& cutoff, const float& bw);
+
+	// ノッチフィルタ
+	void Notch(const unsigned int& sample, const float& cutoff, const float& bw);
+
+	// ローシェルフ
+	void LowShelf(const unsigned int& sample, const float& cutoff, const float& gain, const float& q);
+
+	// ハイシェルフ
+	void HighShelf(const unsigned int& sample, const float& cutoff, const float& gain, const float& q);
+
+	// ピーキング
+	void Peaking(const unsigned int& sample, const float& cutoff, const float& gain, const float& bw);
+
+	// オールパス
+	void AllPass(const unsigned int& sample, const float& cutoff, const float& q);
+
 	// 実行
 	void Execution(std::vector<float>& data, float* input, float* output);
-	void Execution(float& data, float* input, float* output);
 
 private:
 	Filter(const Filter&) = delete;

@@ -13,12 +13,18 @@ int main()
 	}
 
 	Okdio s(effe);
-	s.Load("sample.wav");
+	//s.Load("sample.wav");
+	s.SetInfo(info, a);
 	s.AddEffect(snd::Effect::LowPass);
-	s.Play();
+	auto q = s;
+	q.AddEffect(snd::Effect::Volume);
+	q.SetVolume(100.0f);
+	q.AddEffect(snd::Effect::Limiter);
+	q.SetCompParam(1.0f);
+	q.Play(true);
 
 	bool key = false;
-	float cut = 20000.0f;
+	float cut = 1.0f;
 	while (!(GetKeyState(VK_ESCAPE) & 0x80))
 	{
 		if (GetKeyState(VK_SPACE) & 0x80)
@@ -36,7 +42,7 @@ int main()
 
 		if (GetKeyState(VK_UP) & 0x80)
 		{
-			cut += 10.0f;
+			cut += 0000.1f;
 			if (cut > 20000.0f)
 			{
 				cut = 20000.0f;
@@ -44,14 +50,14 @@ int main()
 		}
 		else if (GetKeyState(VK_DOWN) & 0x80)
 		{
-			cut -= 10.0f;
-			if (cut < 10.0f)
+			cut -= 0000.1f;
+			if (cut < 0.0f)
 			{
-				cut = 10.0f;
+				cut = 0.0f;
 			}
 		}
 
-		s.SetFilterParam(cut);
+		//q.SetVolume(cut);
 		printf("%f\n", cut);
 	}
 

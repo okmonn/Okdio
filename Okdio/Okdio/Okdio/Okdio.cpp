@@ -87,6 +87,7 @@ void Okdio::EffeInit(void)
 {
 	memset(&inout[0], 0, sizeof(inout));
 	filter = { 10.0f, 1.0f / std::sqrt(2.0f) };
+	comp   = { 1.0f, 1.0f };
 	volume = 1.0f;
 }
 
@@ -164,6 +165,19 @@ bool Okdio::SetFilterParam(const float& cutoff, const float& bw)
 	}
 
 	filter = { cutoff, bw };
+
+	return true;
+}
+
+// 圧縮系パラメータセット
+bool Okdio::SetCompParam(const float& threshold, const float& ratio)
+{
+	if (threshold < 0.0f || ratio <= 0.0f)
+	{
+		return false;
+	}
+
+	comp = { threshold, ratio };
 
 	return true;
 }
@@ -336,6 +350,7 @@ void Okdio::operator=(const Okdio& okdio)
 		return;
 	}
 
+	effe     = okdio.effe;
 	name     = okdio.name;
 	index    = 0;
 	cnt      = 0;

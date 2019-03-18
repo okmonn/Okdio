@@ -31,6 +31,9 @@ public:
 	// デジタルフィルタパラメータセット
 	bool SetFilterParam(const float& cutoff, const float& bw = 1.0f / std::sqrt(2.0f));
 
+	// 圧縮系パラメータセット
+	bool SetCompParam(const float& threshold, const float& ratio = 1.0f / 10.0);
+
 	// ボリュームセット
 	bool SetVolume(const float& volume);
 
@@ -134,6 +137,9 @@ private:
 
 	// デジタルフィルタパラメータ
 	snd::FilterParam filter;
+
+	// 圧縮系パラメータ
+	snd::CompParam comp;
 
 	// ボリューム
 	float volume;
