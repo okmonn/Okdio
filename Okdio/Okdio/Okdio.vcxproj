@@ -138,6 +138,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Okdio\Effector\Effector.h" />
+    <ClInclude Include="Okdio\Effector\Queue.h" />
     <ClInclude Include="Okdio\Filter\Filter.h" />
     <ClInclude Include="Okdio\Okdio.h" />
     <ClInclude Include="Okdio\SoundFunc\SoundFunc.h" />

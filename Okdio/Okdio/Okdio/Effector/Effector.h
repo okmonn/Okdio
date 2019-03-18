@@ -1,8 +1,9 @@
 #pragma once
+#include "Queue.h"
 #include "../SoundInfo.h"
-#include <deque>
 #include <mutex>
 #include <vector>
+#include <memory>
 #include <thread>
 #include <functional>
 #include <unordered_map>
@@ -11,17 +12,17 @@
 class Okdio;
 class Filter;
 
-// サウンドエフェクト中心クラス
+// サウンドエフェクター
 class Effector
 {
 public:
 	// コンストラクタ
-	Effector(const unsigned int& threadNum, const unsigned int& capacity);
+	Effector(const unsigned int& threadNum, const unsigned int& queueCapacity);
 	// デストラクタ
 	~Effector();
 
 	// キューに追加
-	bool AddQueue(Okdio* okdio);
+	bool Add(Okdio* okdio);
 
 private:
 	Effector(const Effector&) = delete;
@@ -31,35 +32,32 @@ private:
 	void Init(void);
 
 	// ローパスフィルタ実行
-	void ExecutionLowPass(Okdio* okdio);
+	void LowPass(Okdio* okdio);
 
 	// ボリューム実行
-	void ExecutionVolume(Okdio* okdio);
+	void Volume(Okdio* okdio);
 
 	// 関数ポインタセット
 	void SetFunc(void);
 
-	// 非同期
+	// 並列処理
 	void Stream(void);
 
 
-	// デジタルフィルタ
+	// フィルター
 	std::unique_ptr<Filter>filter;
+
+	// スレッドフラグ
+	bool threadFlag;
+
+	// キュー
+	Queue<Okdio*>queue;
 
 	// 排他制御
 	std::mutex mtx;
 
 	// 待機
 	std::condition_variable cv;
-
-	// キュー最大数
-	unsigned int capacity;
-
-	// スレッドフラグ
-	bool threadFlag;
-
-	// キュー
-	std::deque<Okdio*>queue;
 
 	// スレッド
 	std::vector<std::thread>th;

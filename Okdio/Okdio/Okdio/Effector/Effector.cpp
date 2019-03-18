@@ -1,11 +1,10 @@
 #include "Effector.h"
 #include "../Okdio.h"
 #include "../Filter/Filter.h"
-#include <algorithm>
 
 // コンストラクタ
-Effector::Effector(const unsigned int& threadNum, const unsigned int& capacity) : 
-	capacity(capacity), threadFlag(true)
+Effector::Effector(const unsigned int& threadNum, const unsigned int& queueCapacity) : 
+	threadFlag(true), queue(queueCapacity)
 {
 	Init();
 	SetFunc();
@@ -22,13 +21,27 @@ Effector::~Effector()
 {
 	threadFlag = false;
 	cv.notify_all();
+
 	for (std::thread& i : th)
 	{
-		if (i.joinable() == true)
+		i.join();
+	}
+}
+
+// キューに追加
+bool Effector::Add(Okdio* okdio)
+{
+	{
+		std::unique_lock<std::mutex>lock(mtx);
+		if (!queue.Push(okdio))
 		{
-			i.join();
+			return false;
 		}
 	}
+
+	cv.notify_all();
+
+	return true;
 }
 
 // 初期化
@@ -38,14 +51,14 @@ void Effector::Init(void)
 }
 
 // ローパスフィルタ実行
-void Effector::ExecutionLowPass(Okdio* okdio)
+void Effector::LowPass(Okdio* okdio)
 {
 	filter->LowPass(okdio->info.sample, okdio->filter.cutoff, okdio->filter.bw);
 	filter->Execution(okdio->Wave(), okdio->inout[0], okdio->inout[1]);
 }
 
 // ボリューム実行
-void Effector::ExecutionVolume(Okdio* okdio)
+void Effector::Volume(Okdio* okdio)
 {
 	for (float& i : okdio->Wave())
 	{
@@ -56,42 +69,35 @@ void Effector::ExecutionVolume(Okdio* okdio)
 // 関数ポインタセット
 void Effector::SetFunc(void)
 {
-	func[snd::Effect::LowPass] = std::bind(&Effector::ExecutionLowPass, this, std::placeholders::_1);
-	func[snd::Effect::Volume]  = std::bind(&Effector::ExecutionVolume, this, std::placeholders::_1);
+	func[snd::Effect::LowPass] = std::bind(&Effector::LowPass, this, std::placeholders::_1);
+	func[snd::Effect::Volume]  = std::bind(&Effector::Volume, this, std::placeholders::_1);
 }
 
-// キューに追加
-bool Effector::AddQueue(Okdio* okdio)
-{
-	std::unique_lock<std::mutex>lock(mtx);
-	if (queue.size() >= capacity)
-	{
-		return false;
-	}
-
-	queue.push_back(okdio);
-	cv.notify_all();
-
-	return true;
-}
-
-// 非同期
+// 並列処理
 void Effector::Stream(void)
 {
 	while (threadFlag)
 	{
-		std::unique_lock<std::mutex>lock(mtx);
-		while (queue.empty())
+		Okdio* okdio = nullptr;
 		{
-			cv.wait(lock);
+			std::unique_lock<std::mutex>lock(mtx);
+			while (queue.Empty())
+			{
+				if (threadFlag == false)
+				{
+					return;
+				}
+				cv.wait(lock);
+			}
+
+			queue.Pop(okdio);
 		}
 
-		for (snd::Effect& type : queue.front()->type)
+		for (snd::Effect& i : okdio->type)
 		{
-			func[type](queue.front());
+			func[i](okdio);
 		}
 
-		SetEvent(queue.front()->handle);
-		queue.pop_front();
+		SetEvent(okdio->handle);
 	}
 }

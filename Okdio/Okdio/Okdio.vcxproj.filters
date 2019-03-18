@@ -34,6 +34,9 @@
     <Filter Include="Func">
       <UniqueIdentifier>{07eba843-56c7-4013-9dee-c8f29caa708c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Effector\Queue">
+      <UniqueIdentifier>{290519b0-04bc-4f08-a2b2-78d08681a83c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -85,6 +88,9 @@
     </ClInclude>
     <ClInclude Include="Okdio\Effector\Effector.h">
       <Filter>Effector</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\Effector\Queue.h">
+      <Filter>Effector\Queue</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

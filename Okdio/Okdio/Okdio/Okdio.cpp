@@ -258,7 +258,10 @@ void Okdio::UpData(void)
 
 	if (!effe.expired())
 	{
-		effe.lock()->AddQueue(this);
+		while (effe.lock()->Add(this) == false)
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		}
 	}
 }
 

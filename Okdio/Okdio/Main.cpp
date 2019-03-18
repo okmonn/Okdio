@@ -14,11 +14,11 @@ int main()
 
 	Okdio s(effe);
 	s.Load("sample.wav");
-	s.SetFilterParam(100.0f);
 	s.AddEffect(snd::Effect::LowPass);
 	s.Play();
 
 	bool key = false;
+	float cut = 20000.0f;
 	while (!(GetKeyState(VK_ESCAPE) & 0x80))
 	{
 		if (GetKeyState(VK_SPACE) & 0x80)
@@ -33,6 +33,26 @@ int main()
 		{
 			key = false;
 		}
+
+		if (GetKeyState(VK_UP) & 0x80)
+		{
+			cut += 10.0f;
+			if (cut > 20000.0f)
+			{
+				cut = 20000.0f;
+			}
+		}
+		else if (GetKeyState(VK_DOWN) & 0x80)
+		{
+			cut -= 10.0f;
+			if (cut < 10.0f)
+			{
+				cut = 10.0f;
+			}
+		}
+
+		s.SetFilterParam(cut);
+		printf("%f\n", cut);
 	}
 
 	return 0;
