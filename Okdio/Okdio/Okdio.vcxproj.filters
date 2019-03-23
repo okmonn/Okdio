@@ -13,93 +13,48 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Loader">
-      <UniqueIdentifier>{15b90c25-371c-43f4-baa6-1d4722f08ac8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="WAVE">
-      <UniqueIdentifier>{45d3e869-8c34-4ed2-b753-4ee43a73a255}</UniqueIdentifier>
-    </Filter>
     <Filter Include="XAudio2">
-      <UniqueIdentifier>{bc918cc7-9c9c-4b1e-8d21-842db715753f}</UniqueIdentifier>
+      <UniqueIdentifier>{b1ecac31-6ebe-4196-871f-8353103e5407}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Loader">
+      <UniqueIdentifier>{130c1a2c-9c15-4167-aba1-acb38b48b578}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="etc">
+      <UniqueIdentifier>{b015b757-da4d-4769-b630-3eff06a0330e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Okdio">
-      <UniqueIdentifier>{efd2f50d-5df9-47c4-a49b-c050c0d2d221}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Effector">
-      <UniqueIdentifier>{b487651d-bac9-4c0c-a95c-d8c2db220fc4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Filter">
-      <UniqueIdentifier>{fe962891-63f0-46b7-baa0-9b90743fe521}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Func">
-      <UniqueIdentifier>{07eba843-56c7-4013-9dee-c8f29caa708c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Effector\Queue">
-      <UniqueIdentifier>{290519b0-04bc-4f08-a2b2-78d08681a83c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Comp">
-      <UniqueIdentifier>{190f3c5d-4450-4b91-ab15-4c228a48b1c4}</UniqueIdentifier>
+      <UniqueIdentifier>{80dd49b0-b207-4f66-a621-9d15c5f6a528}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Okdio\WAVE\WAVE.cpp">
-      <Filter>WAVE</Filter>
-    </ClCompile>
-    <ClCompile Include="Okdio\SoundLoader\SoundLoader.cpp">
-      <Filter>Loader</Filter>
-    </ClCompile>
     <ClCompile Include="Okdio\XAudio2\XAudio2.cpp">
       <Filter>XAudio2</Filter>
     </ClCompile>
-    <ClCompile Include="Okdio\Okdio.cpp">
+    <ClCompile Include="Okdio\Loader\Loader.cpp">
+      <Filter>Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="Okdio\OKdio.cpp">
       <Filter>Okdio</Filter>
-    </ClCompile>
-    <ClCompile Include="Okdio\Filter\Filter.cpp">
-      <Filter>Filter</Filter>
-    </ClCompile>
-    <ClCompile Include="Okdio\SoundFunc\SoundFunc.cpp">
-      <Filter>Func</Filter>
-    </ClCompile>
-    <ClCompile Include="Okdio\Effector\Effector.cpp">
-      <Filter>Effector</Filter>
-    </ClCompile>
-    <ClCompile Include="Okdio\Comp\Comp.cpp">
-      <Filter>Comp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Okdio\SoundLoader\SoundLoader.h">
-      <Filter>Loader</Filter>
-    </ClInclude>
-    <ClInclude Include="Okdio\WAVE\WAVE.h">
-      <Filter>WAVE</Filter>
-    </ClInclude>
-    <ClInclude Include="Okdio\SoundInfo.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Okdio\XAudio2\XAudio2.h">
       <Filter>XAudio2</Filter>
     </ClInclude>
-    <ClInclude Include="Okdio\Okdio.h">
+    <ClInclude Include="Okdio\Loader\Loader.h">
+      <Filter>Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\etc\Info.h">
+      <Filter>etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\etc\WaveFmt.h">
+      <Filter>etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\OKdio.h">
       <Filter>Okdio</Filter>
-    </ClInclude>
-    <ClInclude Include="Okdio\Filter\Filter.h">
-      <Filter>Filter</Filter>
-    </ClInclude>
-    <ClInclude Include="Okdio\SoundFunc\SoundFunc.h">
-      <Filter>Func</Filter>
-    </ClInclude>
-    <ClInclude Include="Okdio\Effector\Effector.h">
-      <Filter>Effector</Filter>
-    </ClInclude>
-    <ClInclude Include="Okdio\Effector\Queue.h">
-      <Filter>Effector\Queue</Filter>
-    </ClInclude>
-    <ClInclude Include="Okdio\Comp\Comp.h">
-      <Filter>Comp</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -3,7 +3,7 @@
 struct IXAudio2;
 struct IXAudio2MasteringVoice;
 
-// XAudio2
+// WindowsAPIのXAudio2
 class XAudio2
 {
 public:
@@ -12,19 +12,18 @@ public:
 
 	// インスタンス変数取得
 	static XAudio2& Get(void);
+
 	// オーディオ取得
 	IXAudio2* Audio(void) const;
-	// マスタリング取得
-	IXAudio2MasteringVoice* Mastering(void) const;
-
+	
 private:
 	// コンストラクタ
 	XAudio2();
 	XAudio2(const XAudio2&) = delete;
 	void operator=(const XAudio2&) = delete;
 
-	// COM初期化
-	long InitCom(void) const;
+	// COMの初期化
+	long ComInit(void);
 
 	// オーディオ生成
 	long CreateAudio(void);

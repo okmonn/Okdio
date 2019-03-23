@@ -1,18 +1,9 @@
-#include "Okdio.h"
+#include "OKdio.h"
 #include "XAudio2/XAudio2.h"
-#include "SoundLoader/SoundLoader.h"
-#include "SoundFunc/SoundFunc.h"
+#include "Loader/Loader.h"
 #include <ks.h>
-#include <tchar.h>
-#include <algorithm>
 #include <ksmedia.h>
-
-// メモリ解放
-#define Destroy(X) { if((X) != nullptr) (X)->DestroyVoice(); (X) = nullptr; }
-// 波形データ格納バッファ数
-#define BUFFER 2
-// データサイズオフセット
-#define OFFSET 100
+#include <algorithm>
 
 // スピーカー設定用配列
 const unsigned long spk[] = {
@@ -26,6 +17,12 @@ const unsigned long spk[] = {
 	KSAUDIO_SPEAKER_7POINT1_SURROUND
 };
 
+// バッファ最大数
+#define BUFFER 2
+
+// 重ね掛け最大数
+#define CNT_MAX 10
+
 // コンストラクタ
 Okdio::Okdio()
 {
@@ -33,14 +30,7 @@ Okdio::Okdio()
 }
 
 // コンストラクタ
-Okdio::Okdio(std::weak_ptr<Effector> effe) : 
-	effe(effe)
-{
-	Init();
-}
-
-// コンストラクタ
-Okdio::Okdio(const std::string & fileName)
+Okdio::Okdio(const std::string& fileName)
 {
 	Init();
 	Load(fileName);
@@ -50,50 +40,35 @@ Okdio::Okdio(const std::string & fileName)
 Okdio::Okdio(const snd::Info& info, const std::vector<float>& data)
 {
 	Init();
-	SetInfo(info, data);
-}
-
-// コピーコンストラクタ
-Okdio::Okdio(const Okdio& okdio)
-{
-	(*this) = okdio;
+	CreateOriginal(info, data);
 }
 
 // デストラクタ
 Okdio::~Okdio()
 {
-	Destroy(voice);
-	CloseHandle(handle);
+	if (voice != nullptr)
+	{
+		voice->DestroyVoice();
+	}
 }
 
 // 初期化
 void Okdio::Init(void)
 {
-	voice  = nullptr;
-	name   = std::nullopt;
-	index  = 0;
-	cnt    = 0;
-	loop   = false;
-	handle = CreateEventEx(nullptr, false, false, EVENT_ALL_ACCESS);
-
-	read.push_back(0);
-	wave.resize(BUFFER);
-
-	EffeInit();
-}
-
-// エフェクトパラメータ初期化
-void Okdio::EffeInit(void)
-{
-	memset(&inout[0], 0, sizeof(inout));
-	filter = { 10.0f, 1.0f / std::sqrt(2.0f) };
-	comp   = { 1.0f, 1.0f };
-	volume = 1.0f;
+	voice = nullptr;
+	loop  = false;
+	cnt   = 0;
+	index = 0;
+	
+	read.emplace_back(0);
+	data.resize(BUFFER);
 }
 
 // ソースボイス生成
 long Okdio::CreateVoice(void)
 {
+	snd::Info info = Loader::Get().Info(name);
+
 	WAVEFORMATEXTENSIBLE desc{};
 	desc.Format.cbSize          = sizeof(WAVEFORMATEXTENSIBLE) - sizeof(WAVEFORMATEX);
 	desc.Format.nChannels       = info.channel;
@@ -111,100 +86,46 @@ long Okdio::CreateVoice(void)
 #ifdef _DEBUG
 	if (FAILED(hr))
 	{
-		OutputDebugString(_T("\nボイス生成：失敗\n"));
+		OutputDebugStringA("\nソースボイス生成：失敗\n");
 	}
 #endif
 
 	return hr;
 }
 
-// 読み込み
+// ファイルから読み込み
 int Okdio::Load(const std::string& fileName)
 {
-	if (SoundLoader::Get().Load(fileName, info) != 0)
-	{
-		return -1;
-	}
-
-	if (FAILED(CreateVoice()))
+	if (Loader::Get().Load(fileName) != 0)
 	{
 		return -1;
 	}
 
 	name = fileName;
 
+	if (FAILED(CreateVoice()))
+	{
+		return -1;
+	}
+
 	UpData();
 
 	return 0;
 }
 
-// オリジナル情報セット
-int Okdio::SetInfo(const snd::Info& info, const std::vector<float>& data)
+// オリジナル波形生成
+int Okdio::CreateOriginal(const snd::Info& info, const std::vector<float>& data)
 {
-	this->info = info;
+	name = Loader::Get().Create(info, data);
 
 	if (FAILED(CreateVoice()))
 	{
 		return -1;
 	}
 
-	original = data;
-
 	UpData();
 
 	return 0;
-}
-
-// デジタルフィルタパラメータセット
-bool Okdio::SetFilterParam(const float& cutoff, const float& bw)
-{
-	if (bw <= 0.0f
-		|| cutoff < 10.0f || snd::Floor(float(info.sample / 2), 3) < cutoff)
-	{
-		return false;
-	}
-
-	filter = { cutoff, bw };
-
-	return true;
-}
-
-// 圧縮系パラメータセット
-bool Okdio::SetCompParam(const float& threshold, const float& ratio)
-{
-	if (threshold < 0.0f || ratio <= 0.0f)
-	{
-		return false;
-	}
-
-	comp = { threshold, ratio };
-
-	return true;
-}
-
-// ボリュームセット
-bool Okdio::SetVolume(const float& volume)
-{
-	if (volume < 0.0f)
-	{
-		return false;
-	}
-
-	this->volume = volume;
-
-	return true;
-}
-
-// エフェクトセット
-void Okdio::SetEffect(const std::initializer_list<snd::Effect>& type)
-{
-	this->type = type;
-}
-
-// エフェクト追加
-void Okdio::AddEffect(const snd::Effect& type)
-{
-	this->type.push_back(type);
 }
 
 // 再生
@@ -214,14 +135,14 @@ long Okdio::Play(const bool& loop)
 	if (FAILED(hr))
 	{
 #ifdef _DEBUG
-		OutputDebugString(_T("\n再生：失敗\n"));
+		OutputDebugStringA("\n再生：失敗\n");
 #endif
 		return hr;
 	}
 
 	this->loop = loop;
 
-	++cnt;
+	cnt = (cnt + 1 >= CNT_MAX) ? 0 : ++cnt;
 	if (cnt > read.size())
 	{
 		read.push_back(0);
@@ -234,69 +155,31 @@ long Okdio::Play(const bool& loop)
 long Okdio::Stop(void)
 {
 	auto hr = voice->Stop();
-#ifdef _DEBUG
 	if (FAILED(hr))
 	{
-		OutputDebugString(_T("\n停止：失敗\n"));
+		OutputDebugStringA("\n停止：失敗\n");
 	}
-#endif
 
 	return hr;
 }
-
-// 波形データ更新
-void Okdio::UpData(void)
-{
-	wave[index].assign(Bps(), 0.0f);
-
-	//データ全体サイズ
-	const unsigned int dataSize = (name != std::nullopt)
-		? unsigned int(SoundLoader::Get().Wave(name.value())->size())
-		: unsigned int(original.size());
-
-	for (unsigned int& i : read)
-	{
-		//残りサイズ計算
-		unsigned int size = (dataSize - i >= Bps()) ? Bps() : dataSize - i;
-		if (i + size >= dataSize)
-		{
-			continue;
-		}
-
-		std::vector<float>origin = (name != std::nullopt)
-			? std::vector<float>(&SoundLoader::Get().Wave(name.value())->at(i), &SoundLoader::Get().Wave(name.value())->at(i + size))
-			: std::vector<float>(&original[i], &original[i + size]);
-
-		std::transform(origin.begin(), origin.end(), wave[index].begin(), wave[index].begin(), std::plus<float>());
-	}
-
-	if (!effe.expired())
-	{
-		while (effe.lock()->Add(this) == false)
-		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(1));
-		}
-	}
-}
-
-// バッファに追加
+// 波形データをボイスバッファに追加
 long Okdio::Submit(void)
 {
 	XAUDIO2_BUFFER buf{};
-	buf.AudioBytes = unsigned int(sizeof(float) * wave[index].size());
-	buf.pAudioData = (unsigned char*)(wave[index].data());
-	
+	buf.AudioBytes = unsigned int(sizeof(float) * data[index].size());
+	buf.pAudioData = (unsigned char*)(data[index].data());
+
 	auto hr = voice->SubmitSourceBuffer(&buf);
 	if (FAILED(hr))
 	{
 #ifdef _DEBUG
-		OutputDebugString(_T("\nバッファに追加：失敗\n"));
+		OutputDebugStringA("\nソースボイスのバッファ追加：失敗\n");
 #endif
 		return hr;
 	}
 
 	index = (index + 1 >= BUFFER) ? 0 : ++index;
-	for (unsigned int& i : read)
+	for (long& i : read)
 	{
 		i += Bps();
 	}
@@ -304,15 +187,34 @@ long Okdio::Submit(void)
 	return hr;
 }
 
+// 波形データ更新
+void Okdio::UpData(void)
+{
+	data[index].assign(Bps(), 0.0f);
+
+	//データ全体サイズ
+	const long dataSize = Loader::Get().Data(name).lock()->size();
+
+	for (long& i : read)
+	{
+		//残りサイズ
+		long size = (dataSize - i >= Bps()) ? Bps() : dataSize - i;
+		if (i + size >= dataSize)
+		{
+			continue;
+		}
+
+		std::transform(&Loader::Get().Data(name).lock()->at(i), &Loader::Get().Data(name).lock()->at(i + size), data[index].begin(), data[index].begin(), std::plus<float>());
+	}
+}
+
 // 終了確認
 void Okdio::CheckEnd(void)
 {
 	//データ全体サイズ
-	const unsigned int dataSize = (name != std::nullopt)
-		? unsigned int(SoundLoader::Get().Wave(name.value())->size())
-		: unsigned int(original.size());
+	const long dataSize = Loader::Get().Data(name).lock()->size();
 
-	for (std::vector<unsigned int>::iterator itr = read.begin(); itr != read.end();)
+	for (std::vector<long>::iterator itr = read.begin(); itr != read.end();)
 	{
 		if ((*itr) >= dataSize)
 		{
@@ -330,7 +232,7 @@ void Okdio::CheckEnd(void)
 	}
 }
 
-// 波形読み込みのリセット
+// リセット
 void Okdio::Reset(void)
 {
 	if (read.size() <= 0)
@@ -340,69 +242,33 @@ void Okdio::Reset(void)
 	}
 }
 
-// 代入
-void Okdio::operator=(const Okdio& okdio)
-{
-	info = okdio.info;
-
-	if (FAILED(CreateVoice()))
-	{
-		return;
-	}
-
-	effe     = okdio.effe;
-	name     = okdio.name;
-	index    = 0;
-	cnt      = 0;
-	loop     = false;
-	handle   = CreateEventEx(nullptr, false, false, EVENT_ALL_ACCESS);
-	original = okdio.original;
-
-	read.assign(1, 0);
-	wave.resize(BUFFER);
-
-	EffeInit();
-
-	UpData();
-}
-
-// 一回の処理データ取得
-inline constexpr unsigned int Okdio::Bps(void) const
-{
-	return info.sample * info.channel / OFFSET;
-}
-
-// 現在の波形データ
-std::vector<float>& Okdio::Wave(void)
-{
-	return wave[index];
-}
-
 // データ読み込み前に呼び出し
 void __stdcall Okdio::OnVoiceProcessingPassStart(unsigned int SamplesRequired)
 {
-	if (!effe.expired())
-	{
-		WaitForSingleObject(handle, INFINITE);
-	}
-
 	Submit();
 }
 
 // 新しいバッファの処理開始時に呼び出し
-void __stdcall Okdio::OnBufferStart(void * pBufferContext)
+void __stdcall Okdio::OnBufferStart(void* pBufferContext)
 {
 	UpData();
 }
 
 // バッファの処理終了時に呼び出し
-void __stdcall Okdio::OnBufferEnd(void * pBufferContext)
+void __stdcall Okdio::OnBufferEnd(void* pBufferContext)
 {
 	CheckEnd();
 }
 
 // 音声の処理パス終了時に呼び出し
-void __stdcall Okdio::OnVoiceProcessingPassEnd()
+void __stdcall Okdio::OnVoiceProcessingPassEnd(void)
 {
 	Reset();
+}
+
+// 一回の処理データ取得
+inline long Okdio::Bps(void) const
+{
+	snd::Info info = Loader::Get().Info(name);
+	return info.sample * info.channel / 100;
 }

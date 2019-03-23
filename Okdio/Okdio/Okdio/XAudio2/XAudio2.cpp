@@ -1,15 +1,10 @@
 #include "XAudio2.h"
 #include <xaudio2.h>
-#include <tchar.h>
 
 #pragma comment(lib, "xaudio2.lib")
 
-// メモリ解放
-#define Release(X) { if((X) != nullptr) (X)->Release(); (X) = nullptr; }
-#define Destroy(X) { if((X) != nullptr) (X)->DestroyVoice(); (X) = nullptr; }
-
 // コンストラクタ
-XAudio2::XAudio2() :
+XAudio2::XAudio2() : 
 	audio(nullptr), mastering(nullptr)
 {
 	Init();
@@ -18,19 +13,27 @@ XAudio2::XAudio2() :
 // デストラクタ
 XAudio2::~XAudio2()
 {
-	Destroy(mastering);
-	Release(audio);
+	if (mastering != nullptr)
+	{
+		mastering->DestroyVoice();
+	}
+
+	if (audio != nullptr)
+	{
+		audio->Release();
+	}
+
 	CoUninitialize();
 }
 
-// COM初期化
-long XAudio2::InitCom(void) const
+// COMの初期化
+long XAudio2::ComInit(void)
 {
 	auto hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 #ifdef _DEBUG
 	if (FAILED(hr))
 	{
-		OutputDebugString(_T("\nCOM初期化：失敗\n"));
+		OutputDebugStringA("\nCOMの初期化：失敗\n");
 	}
 #endif
 
@@ -44,7 +47,7 @@ long XAudio2::CreateAudio(void)
 #ifdef _DEBUG
 	if (FAILED(hr))
 	{
-		OutputDebugString(_T("\nオーディオ生成：失敗\n"));
+		OutputDebugStringA("\nオーディオ生成：失敗\n");
 	}
 #endif
 
@@ -58,7 +61,7 @@ long XAudio2::CreateMastering(void)
 #ifdef _DEBUG
 	if (FAILED(hr))
 	{
-		OutputDebugString(_T("\nマスタリング生成：失敗\n"));
+		OutputDebugStringA("\nマスタリング生成：失敗\n");
 	}
 #endif
 
@@ -68,7 +71,7 @@ long XAudio2::CreateMastering(void)
 // 初期化
 void XAudio2::Init(void)
 {
-	InitCom();
+	ComInit();
 	CreateAudio();
 	CreateMastering();
 }
@@ -86,8 +89,4 @@ IXAudio2* XAudio2::Audio(void) const
 	return audio;
 }
 
-// マスタリング取得
-IXAudio2MasteringVoice* XAudio2::Mastering(void) const
-{
-	return mastering;
-}
+
