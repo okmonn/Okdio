@@ -13,6 +13,8 @@ public:
 	Okdio();
 	Okdio(const std::string& fileName);
 	Okdio(const snd::Info& info, const std::vector<float>& data);
+	// コピーコンストラクタ
+	Okdio(const Okdio& okdio);
 	// デストラクタ
 	~Okdio();
 
@@ -27,6 +29,9 @@ public:
 
 	// 停止
 	long Stop(void);
+
+	// 代入演算子オーバーロード
+	void operator=(const Okdio& okdio);
 
 private:
 	// 初期化
@@ -63,7 +68,7 @@ private:
 	void __stdcall OnVoiceError(void* pBufferContext, long Error) {}
 
 	// 一回の処理データ取得
-	inline long Bps(void) const;
+	inline size_t Bps(void) const;
 
 
 	// 参照ファイル名
@@ -82,7 +87,7 @@ private:
 	unsigned int index;
 
 	// 波形読み込み位置
-	std::vector<long>read;
+	std::vector<size_t>read;
 
 	// 現在の波形データ
 	std::vector<std::vector<float>>data;

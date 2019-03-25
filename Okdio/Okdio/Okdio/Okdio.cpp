@@ -43,6 +43,12 @@ Okdio::Okdio(const snd::Info& info, const std::vector<float>& data)
 	CreateOriginal(info, data);
 }
 
+// コピーコンストラクタ
+Okdio::Okdio(const Okdio& okdio)
+{
+	(*this) = okdio;
+}
+
 // デストラクタ
 Okdio::~Okdio()
 {
@@ -60,7 +66,7 @@ void Okdio::Init(void)
 	cnt   = 0;
 	index = 0;
 	
-	read.emplace_back(0);
+	read.assign(1, 0);
 	data.resize(BUFFER);
 }
 
@@ -162,6 +168,7 @@ long Okdio::Stop(void)
 
 	return hr;
 }
+
 // 波形データをボイスバッファに追加
 long Okdio::Submit(void)
 {
@@ -179,7 +186,7 @@ long Okdio::Submit(void)
 	}
 
 	index = (index + 1 >= BUFFER) ? 0 : ++index;
-	for (long& i : read)
+	for (size_t& i : read)
 	{
 		i += Bps();
 	}
@@ -193,12 +200,12 @@ void Okdio::UpData(void)
 	data[index].assign(Bps(), 0.0f);
 
 	//データ全体サイズ
-	const long dataSize = Loader::Get().Data(name).lock()->size();
+	const size_t dataSize = Loader::Get().Data(name).lock()->size();
 
-	for (long& i : read)
+	for (size_t& i : read)
 	{
 		//残りサイズ
-		long size = (dataSize - i >= Bps()) ? Bps() : dataSize - i;
+		const size_t size = (dataSize - i >= Bps()) ? Bps() : dataSize - i;
 		if (i + size >= dataSize)
 		{
 			continue;
@@ -212,9 +219,9 @@ void Okdio::UpData(void)
 void Okdio::CheckEnd(void)
 {
 	//データ全体サイズ
-	const long dataSize = Loader::Get().Data(name).lock()->size();
+	const size_t dataSize = Loader::Get().Data(name).lock()->size();
 
-	for (std::vector<long>::iterator itr = read.begin(); itr != read.end();)
+	for (std::vector<size_t>::iterator itr = read.begin(); itr != read.end();)
 	{
 		if ((*itr) >= dataSize)
 		{
@@ -267,8 +274,22 @@ void __stdcall Okdio::OnVoiceProcessingPassEnd(void)
 }
 
 // 一回の処理データ取得
-inline long Okdio::Bps(void) const
+inline size_t Okdio::Bps(void) const
 {
 	snd::Info info = Loader::Get().Info(name);
 	return info.sample * info.channel / 100;
+}
+
+// 代入演算子オーバーロード
+void Okdio::operator=(const Okdio& okdio)
+{
+	Init();
+
+	name = okdio.name;
+	if (FAILED(CreateVoice()))
+	{
+		return;
+	}
+
+	UpData();
 }
