@@ -28,6 +28,12 @@
     <Filter Include="Effector">
       <UniqueIdentifier>{2f124b54-a65f-4736-b7f5-11d08ccacdd1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Effect">
+      <UniqueIdentifier>{00dcbe57-cd6a-45db-a747-6d55e13a1cd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Effect\Volume">
+      <UniqueIdentifier>{fe21f4b9-d330-4a32-9df5-1196178d3b44}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -44,6 +50,9 @@
     </ClCompile>
     <ClCompile Include="Okdio\Effector\Effector.cpp">
       <Filter>Effector</Filter>
+    </ClCompile>
+    <ClCompile Include="Okdio\Effect\Volume.cpp">
+      <Filter>Effect\Volume</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -64,6 +73,12 @@
     </ClInclude>
     <ClInclude Include="Okdio\Effector\Effector.h">
       <Filter>Effector</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\Effect\Effect.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\Effect\Volume.h">
+      <Filter>Effect\Volume</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

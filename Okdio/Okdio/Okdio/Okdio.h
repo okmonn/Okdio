@@ -1,6 +1,7 @@
 #pragma once
 #include "etc/Info.h"
 #include "Effector/Effector.h"
+#include "Effect/Volume.h"
 #include <string>
 #include <vector>
 #include <memory>
@@ -14,7 +15,7 @@ class Okdio :
 public:
 	// コンストラクタ
 	Okdio();
-	Okdio(Effector* effe);
+	Okdio(Effector* effector);
 	Okdio(const std::string& fileName);
 	Okdio(const snd::Info& info, const std::vector<float>& data);
 	// コピーコンストラクタ
@@ -28,9 +29,14 @@ public:
 	// オリジナル波形生成
 	int CreateOriginal(const snd::Info & info, const std::vector<float>& data);
 
+	// エフェクトを末尾に追加
+	void PushEffect(Effect* effect);
+
+	// エフェクトをまとめてセット
+	void SetEffect(std::initializer_list<Effect*>& effect);
+
 	// 再生
 	long Play(const bool& loop = false, const size_t& overlaidMax = 10);
-	long Play(const size_t& overlaidMax = 10, const bool& loop = false);
 
 	// 停止
 	long Stop(void);
@@ -80,7 +86,7 @@ private:
 
 
 	// エフェクター
-	Effector* effe;
+	Effector* effector;
 
 	// 参照ファイル名
 	std::string name;
@@ -105,4 +111,7 @@ private:
 
 	// 現在の波形データ
 	std::vector<std::vector<float>>data;
+
+	// エフェクト
+	std::vector<Effect*>effect;
 };

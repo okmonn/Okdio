@@ -7,13 +7,13 @@ namespace snd
 	{
 	public:
 		// サンプリング周波数
-		unsigned int sample;
+		unsigned short sample;
 
 		// 量子化ビット数
-		unsigned int bit;
+		unsigned short bit;
 
 		// チャンネル数
-		unsigned int channel;
+		unsigned short channel;
 
 
 		// コンストラクタ
@@ -22,12 +22,12 @@ namespace snd
 			bit     = 0;
 			channel = 0;
 		}
-		Info(const unsigned int& i) {
+		Info(const unsigned short& i) {
 			sample  = i;
 			bit     = i;
 			channel = i;
 		}
-		Info(const unsigned int& sample, const unsigned int& bit, const unsigned int& channel) {
+		Info(const unsigned short& sample, const unsigned short& bit, const unsigned short& channel) {
 			this->sample  = sample;
 			this->bit     = bit;
 			this->channel = channel;
@@ -41,7 +41,7 @@ namespace snd
 		~Info() {
 		}
 
-		void operator=(const unsigned int& i) {
+		void operator=(const unsigned short& i) {
 			sample  = i;
 			bit     = i;
 			channel = i;

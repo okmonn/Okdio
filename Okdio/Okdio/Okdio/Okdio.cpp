@@ -1,7 +1,6 @@
 #include "OKdio.h"
 #include "XAudio2/XAudio2.h"
 #include "Loader/Loader.h"
-#include "Effector/Effector.h"
 #include <ks.h>
 #include <ksmedia.h>
 #include <algorithm>
@@ -28,11 +27,11 @@ Okdio::Okdio()
 }
 
 // コンストラクタ
-Okdio::Okdio(Effector* effe)
+Okdio::Okdio(Effector* effector)
 {
 	Init();
 
-	this->effe = effe;
+	this->effector = effector;
 }
 
 // コンストラクタ
@@ -67,12 +66,12 @@ Okdio::~Okdio()
 // 初期化
 void Okdio::Init(void)
 {
-	handle = CreateEventEx(nullptr, false, false, EVENT_ALL_ACCESS);
-	effe   = nullptr;
-	voice  = nullptr;
-	loop   = false;
-	cnt    = 0;
-	index  = 0;
+	effector = nullptr;
+	handle   = CreateEventEx(nullptr, false, false, EVENT_ALL_ACCESS);
+	voice    = nullptr;
+	loop     = false;
+	cnt      = 0;
+	index    = 0;
 	
 	read.assign(1, 0);
 	data.resize(BUFFER);
@@ -142,31 +141,20 @@ int Okdio::CreateOriginal(const snd::Info& info, const std::vector<float>& data)
 	return 0;
 }
 
-// 再生
-long Okdio::Play(const bool& loop, const size_t& overlaidMax)
+// エフェクトを末尾に追加
+void Okdio::PushEffect(Effect* effect)
 {
-	auto hr = voice->Start();
-	if (FAILED(hr))
-	{
-#ifdef _DEBUG
-		OutputDebugStringA("\n再生：失敗\n");
-#endif
-		return hr;
-	}
+	this->effect.emplace_back(effect);
+}
 
-	this->loop = loop;
-
-	cnt += (cnt + 1 >= overlaidMax) ? 0 : 1;
-	if (cnt > read.size())
-	{
-		read.push_back(0);
-	}
-
-	return hr;
+// エフェクトをまとめてセット
+void Okdio::SetEffect(std::initializer_list<Effect*>& effect)
+{
+	this->effect = effect;
 }
 
 // 再生
-long Okdio::Play(const size_t& overlaidMax, const bool& loop)
+long Okdio::Play(const bool& loop, const size_t& overlaidMax)
 {
 	auto hr = voice->Start();
 	if (FAILED(hr))
@@ -246,9 +234,9 @@ void Okdio::UpData(void)
 	}
 
 	//エフェクターに追加
-	if (effe != nullptr)
+	if (effector != nullptr)
 	{
-		effe->Push(this);
+		effector->Push(this);
 	}
 }
 
@@ -289,7 +277,7 @@ void Okdio::Reset(void)
 // データ読み込み前に呼び出し
 void __stdcall Okdio::OnVoiceProcessingPassStart(unsigned int SamplesRequired)
 {
-	if (effe != nullptr)
+	if (effector != nullptr)
 	{
 		WaitForSingleObject(handle, INFINITE);
 	}
@@ -333,8 +321,8 @@ void Okdio::operator=(const Okdio& okdio)
 {
 	Init();
 
-	effe = okdio.effe;
-	name = okdio.name;
+	effector = okdio.effector;
+	name     = okdio.name;
 	if (FAILED(CreateVoice()))
 	{
 		return;

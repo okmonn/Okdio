@@ -129,12 +129,15 @@
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Okdio\Effector\Effector.cpp" />
+    <ClCompile Include="Okdio\Effect\Volume.cpp" />
     <ClCompile Include="Okdio\Loader\Loader.cpp" />
     <ClCompile Include="Okdio\OKdio.cpp" />
     <ClCompile Include="Okdio\XAudio2\XAudio2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Okdio\Effector\Effector.h" />
+    <ClInclude Include="Okdio\Effect\Effect.h" />
+    <ClInclude Include="Okdio\Effect\Volume.h" />
     <ClInclude Include="Okdio\etc\Info.h" />
     <ClInclude Include="Okdio\etc\WaveFmt.h" />
     <ClInclude Include="Okdio\Loader\Loader.h" />

@@ -15,7 +15,7 @@ int main()
 	//s.CreateOriginal(info, a);
 	s.Load("mtgx.wav");
 	auto z = s;
-	z.Play(false);
+	z.Play();
 	while (!(GetKeyState(VK_ESCAPE) & 0x80))
 	{
 

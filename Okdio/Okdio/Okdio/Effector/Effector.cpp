@@ -1,5 +1,6 @@
 #include "Effector.h"
 #include "../OKdio.h"
+#include "../Effect/Effect.h"
 
 // コンストラクタ
 Effector::Effector(const size_t& capacity, const size_t& threadNum) : 
@@ -64,9 +65,9 @@ void Effector::Execution(Okdio** okdio)
 	std::mutex mtx;
 	std::unique_lock<std::mutex>lock(mtx);
 
-	for (float& i : (*okdio)->Data())
+	for (Effect* i : (*okdio)->effect)
 	{
-		i *= 10.0f;
+		
 	}
 
 	SetEvent((*okdio)->handle);

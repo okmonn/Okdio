@@ -88,7 +88,7 @@ namespace wav
 		long size = 0;
 		fread(&size, sizeof(size), 1, file);
 
-		info    = snd::Info(fmt.sample, fmt.bit, fmt.channel);
+		info    = snd::Info(unsigned short(fmt.sample), unsigned short(fmt.bit), unsigned short(fmt.channel));
 		outData = std::make_shared<std::vector<float>>(size / (fmt.bit / 8));
 
 		switch (fmt.bit)
@@ -108,18 +108,6 @@ namespace wav
 		case 16:
 		{
 			std::vector<short>tmp(outData->size());
-			fread(tmp.data(), sizeof(tmp[0]) * tmp.size(), 1, file);
-
-			outData->assign(tmp.begin(), tmp.end());
-			for (float& i : *outData)
-			{
-				i = (i / float(0xffff / 2));
-			}
-			break;
-		}
-		case 32:
-		{
-			std::vector<long>tmp(outData->size());
 			fread(tmp.data(), sizeof(tmp[0]) * tmp.size(), 1, file);
 
 			outData->assign(tmp.begin(), tmp.end());
