@@ -242,6 +242,12 @@ void Okdio::UpData(void)
 
 		std::transform(&Loader::Get().Data(name).lock()->at(i), &Loader::Get().Data(name).lock()->at(i + size), data[index].begin(), data[index].begin(), std::plus<float>());
 	}
+
+	//エフェクターに追加
+	if (effe != nullptr)
+	{
+		effe->Push(this);
+	}
 }
 
 // 終了確認
@@ -325,6 +331,7 @@ void Okdio::operator=(const Okdio& okdio)
 {
 	Init();
 
+	effe = okdio.effe;
 	name = okdio.name;
 	if (FAILED(CreateVoice()))
 	{

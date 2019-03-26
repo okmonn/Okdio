@@ -4,7 +4,7 @@ int main()
 {
 	Effector effe(10, 2);
 
-	Okdio s;
+	Okdio s(&effe);
 	snd::Info info = { 44100, 16, 1 };
 	std::vector<float>a(info.sample * info.channel * 1);
 	for (unsigned int i = 0; i < a.size(); ++i)

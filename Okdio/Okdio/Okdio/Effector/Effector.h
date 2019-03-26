@@ -26,6 +26,9 @@ private:
 	// キューの先頭取り出し
 	bool Pop(Okdio** okdio);
 
+	// エフェクト処理実行
+	void Execution(Okdio** okdio);
+
 	// 非同期
 	void Stream(void);
 

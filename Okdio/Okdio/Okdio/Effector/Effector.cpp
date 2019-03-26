@@ -58,6 +58,20 @@ bool Effector::Pop(Okdio** okdio)
 	return true;
 }
 
+// エフェクト処理実行
+void Effector::Execution(Okdio** okdio)
+{
+	std::mutex mtx;
+	std::unique_lock<std::mutex>lock(mtx);
+
+	for (float& i : (*okdio)->Data())
+	{
+		i *= 10.0f;
+	}
+
+	SetEvent((*okdio)->handle);
+}
+
 // 非同期
 void Effector::Stream(void)
 {
@@ -70,11 +84,6 @@ void Effector::Stream(void)
 			break;
 		}
 
-		for (float& i : okdio->Data())
-		{
-			i *= 0.0f;
-		}
-
-		SetEvent(okdio->handle);
+		Execution(&okdio);
 	}
 }
