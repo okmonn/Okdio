@@ -71,7 +71,7 @@ long XAudio2::CreateMastering(void)
 // ‰Šú‰»
 void XAudio2::Init(void)
 {
-	ComInit();
+	//ComInit();
 	CreateAudio();
 	CreateMastering();
 }
