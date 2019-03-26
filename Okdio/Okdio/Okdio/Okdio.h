@@ -25,7 +25,8 @@ public:
 	int CreateOriginal(const snd::Info & info, const std::vector<float>& data);
 
 	// 再生
-	long Play(const bool& loop = false);
+	long Play(const bool& loop = false, const size_t& overlaidMax = 10);
+	long Play(const size_t& overlaidMax = 10, const bool& loop = false);
 
 	// 停止
 	long Stop(void);
@@ -81,7 +82,7 @@ private:
 	bool loop;
 
 	// 重ねがけ回数
-	unsigned int cnt;
+	size_t cnt;
 
 	// バッファ入れ替え用インデックス
 	unsigned int index;

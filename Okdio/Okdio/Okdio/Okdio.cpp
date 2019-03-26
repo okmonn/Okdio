@@ -20,9 +20,6 @@ const unsigned long spk[] = {
 // バッファ最大数
 #define BUFFER 2
 
-// 重ね掛け最大数
-#define CNT_MAX 10
-
 // コンストラクタ
 Okdio::Okdio()
 {
@@ -135,7 +132,7 @@ int Okdio::CreateOriginal(const snd::Info& info, const std::vector<float>& data)
 }
 
 // 再生
-long Okdio::Play(const bool& loop)
+long Okdio::Play(const bool& loop, const size_t& overlaidMax)
 {
 	auto hr = voice->Start();
 	if (FAILED(hr))
@@ -148,7 +145,30 @@ long Okdio::Play(const bool& loop)
 
 	this->loop = loop;
 
-	cnt = (cnt + 1 >= CNT_MAX) ? 0 : ++cnt;
+	cnt += (cnt + 1 >= overlaidMax) ? 0 : 1;
+	if (cnt > read.size())
+	{
+		read.push_back(0);
+	}
+
+	return hr;
+}
+
+// 再生
+long Okdio::Play(const size_t& overlaidMax, const bool& loop)
+{
+	auto hr = voice->Start();
+	if (FAILED(hr))
+	{
+#ifdef _DEBUG
+		OutputDebugStringA("\n再生：失敗\n");
+#endif
+		return hr;
+	}
+
+	this->loop = loop;
+
+	cnt += (cnt + 1 >= overlaidMax) ? 0 : 1;
 	if (cnt > read.size())
 	{
 		read.push_back(0);
