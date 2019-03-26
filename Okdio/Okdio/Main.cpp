@@ -2,6 +2,8 @@
 
 int main()
 {
+	Effector effe(10, 2);
+
 	Okdio s;
 	snd::Info info = { 44100, 16, 1 };
 	std::vector<float>a(info.sample * info.channel * 1);

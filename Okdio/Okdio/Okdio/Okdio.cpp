@@ -1,6 +1,7 @@
 #include "OKdio.h"
 #include "XAudio2/XAudio2.h"
 #include "Loader/Loader.h"
+#include "Effector/Effector.h"
 #include <ks.h>
 #include <ksmedia.h>
 #include <algorithm>
@@ -22,6 +23,13 @@ const unsigned long spk[] = {
 
 // コンストラクタ
 Okdio::Okdio()
+{
+	Init();
+}
+
+// コンストラクタ
+Okdio::Okdio(Effector* effe) : 
+	effe(effe)
 {
 	Init();
 }
@@ -58,10 +66,11 @@ Okdio::~Okdio()
 // 初期化
 void Okdio::Init(void)
 {
-	voice = nullptr;
-	loop  = false;
-	cnt   = 0;
-	index = 0;
+	handle = CreateEventEx(nullptr, false, false, EVENT_ALL_ACCESS);
+	voice  = nullptr;
+	loop   = false;
+	cnt    = 0;
+	index  = 0;
 	
 	read.assign(1, 0);
 	data.resize(BUFFER);
@@ -272,6 +281,11 @@ void Okdio::Reset(void)
 // データ読み込み前に呼び出し
 void __stdcall Okdio::OnVoiceProcessingPassStart(unsigned int SamplesRequired)
 {
+	if (effe != nullptr)
+	{
+		WaitForSingleObject(handle, INFINITE);
+	}
+
 	Submit();
 }
 
@@ -298,6 +312,12 @@ inline size_t Okdio::Bps(void) const
 {
 	snd::Info info = Loader::Get().Info(name);
 	return info.sample * info.channel / 100;
+}
+
+// 現在の波形情報取得
+std::vector<float>& Okdio::Data(void)
+{
+	return data[index];
 }
 
 // 代入演算子オーバーロード

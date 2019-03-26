@@ -117,6 +117,18 @@ namespace wav
 			}
 			break;
 		}
+		case 32:
+		{
+			std::vector<long>tmp(outData->size());
+			fread(tmp.data(), sizeof(tmp[0]) * tmp.size(), 1, file);
+
+			outData->assign(tmp.begin(), tmp.end());
+			for (float& i : *outData)
+			{
+				i = (i / float(0xffff / 2));
+			}
+			break;
+		}
 		default:
 			break;
 		}

@@ -1,16 +1,20 @@
 #pragma once
 #include "etc/Info.h"
+#include "Effector/Effector.h"
 #include <string>
 #include <vector>
+#include <memory>
 #include <xaudio2.h>
 
 // サウンドライブラリ
 class Okdio :
 	IXAudio2VoiceCallback
 {
+	friend Effector;
 public:
 	// コンストラクタ
 	Okdio();
+	Okdio(Effector* effe);
 	Okdio(const std::string& fileName);
 	Okdio(const snd::Info& info, const std::vector<float>& data);
 	// コピーコンストラクタ
@@ -71,9 +75,18 @@ private:
 	// 一回の処理データ取得
 	inline size_t Bps(void) const;
 
+	// 現在の波形情報取得
+	std::vector<float>& Data(void);
+
+
+	// エフェクター
+	Effector* effe;
 
 	// 参照ファイル名
 	std::string name;
+
+	// イベントハンドル
+	void* handle;
 
 	// ソースボイス
 	IXAudio2SourceVoice* voice;
