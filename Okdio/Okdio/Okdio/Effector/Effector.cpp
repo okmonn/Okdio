@@ -2,11 +2,6 @@
 #include "../OKdio.h"
 
 // コンストラクタ
-Effector::Effector()
-{
-}
-
-// コンストラクタ
 Effector::Effector(const size_t& capacity, const size_t& threadNum) : 
 	capacity(capacity), threadFlag(true)
 {

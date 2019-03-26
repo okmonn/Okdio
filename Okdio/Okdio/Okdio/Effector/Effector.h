@@ -12,7 +12,6 @@ class Effector
 {
 public:
 	// コンストラクタ
-	Effector();
 	Effector(const size_t& capacity, const size_t& threadNum);
 	// デストラクタ
 	~Effector();
