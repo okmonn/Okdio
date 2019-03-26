@@ -28,10 +28,11 @@ Okdio::Okdio()
 }
 
 // コンストラクタ
-Okdio::Okdio(Effector* effe) : 
-	effe(effe)
+Okdio::Okdio(Effector* effe)
 {
 	Init();
+
+	this->effe = effe;
 }
 
 // コンストラクタ
@@ -67,6 +68,7 @@ Okdio::~Okdio()
 void Okdio::Init(void)
 {
 	handle = CreateEventEx(nullptr, false, false, EVENT_ALL_ACCESS);
+	effe   = nullptr;
 	voice  = nullptr;
 	loop   = false;
 	cnt    = 0;
