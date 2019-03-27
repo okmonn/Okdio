@@ -1,23 +1,33 @@
 #include "Okdio/OKdio.h"
+#include "Okdio/Effector.h"
+#include "Okdio/Effects.h"
+#include <Windows.h>
 
 int main()
 {
 	Effector effe(10, 2);
+	Volume vol(1.0f);
+	Distortion dis(100.0f);
+	Okdio s("mtgx.wav", &effe);
+	//s.SetEffect({ &dis, &vol });
+	s.Play();
 
-	Okdio s(&effe);
-	snd::Info info = { 44100, 16, 1 };
-	std::vector<float>a(info.sample * info.channel * 1);
-	for (unsigned int i = 0; i < a.size(); ++i)
+	bool input = false;
+	while (true)
 	{
-		a[i] = 1.0f * std::sin(2.0f * 3.14f * 440.0f * i / info.sample);
+		if (GetKeyState(VK_SPACE) & 0x80)
+		{
+			if (input == false)
+			{
+				s.Play();
+				input = true;
+			}
+		}
+		else
+		{
+			input = false;
+		}
 	}
 
-	//s.CreateOriginal(info, a);
-	s.Load("mtgx.wav");
-	auto z = s;
-	z.Play();
-	while (!(GetKeyState(VK_ESCAPE) & 0x80))
-	{
-
-	}
+	return 0;
 }

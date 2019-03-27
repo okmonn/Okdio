@@ -14,9 +14,8 @@ public:
 	virtual ~Effect() {
 	}
 
-protected:
-
 private:
 	// é¿çs
-	virtual void Execution(std::vector<float>& data) = delete;
+	virtual void Execution(std::vector<float>& data) {
+	}
 };

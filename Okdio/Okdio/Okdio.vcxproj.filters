@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="XAudio2">
-      <UniqueIdentifier>{b1ecac31-6ebe-4196-871f-8353103e5407}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Loader">
       <UniqueIdentifier>{130c1a2c-9c15-4167-aba1-acb38b48b578}</UniqueIdentifier>
     </Filter>
@@ -34,13 +31,22 @@
     <Filter Include="Effect\Volume">
       <UniqueIdentifier>{fe21f4b9-d330-4a32-9df5-1196178d3b44}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{b1ecac31-6ebe-4196-871f-8353103e5407}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Callback">
+      <UniqueIdentifier>{cbbf5f54-a427-4f05-9217-189c3a0b9e71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\XAudio2">
+      <UniqueIdentifier>{7691437c-ecc9-4909-9e31-227885af2f41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Effect\Distortion">
+      <UniqueIdentifier>{eb949c1d-a12f-4ae3-a40e-366a05d07000}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Okdio\XAudio2\XAudio2.cpp">
-      <Filter>XAudio2</Filter>
     </ClCompile>
     <ClCompile Include="Okdio\Loader\Loader.cpp">
       <Filter>Loader</Filter>
@@ -48,17 +54,23 @@
     <ClCompile Include="Okdio\OKdio.cpp">
       <Filter>Okdio</Filter>
     </ClCompile>
-    <ClCompile Include="Okdio\Effector\Effector.cpp">
-      <Filter>Effector</Filter>
-    </ClCompile>
     <ClCompile Include="Okdio\Effect\Volume.cpp">
       <Filter>Effect\Volume</Filter>
     </ClCompile>
+    <ClCompile Include="Okdio\XAudio2\VoiceCallback.cpp">
+      <Filter>Engine\Callback</Filter>
+    </ClCompile>
+    <ClCompile Include="Okdio\XAudio2\XAudio2.cpp">
+      <Filter>Engine\XAudio2</Filter>
+    </ClCompile>
+    <ClCompile Include="Okdio\Effect\Distortion.cpp">
+      <Filter>Effect\Distortion</Filter>
+    </ClCompile>
+    <ClCompile Include="Okdio\Effector.cpp">
+      <Filter>Effector</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Okdio\XAudio2\XAudio2.h">
-      <Filter>XAudio2</Filter>
-    </ClInclude>
     <ClInclude Include="Okdio\Loader\Loader.h">
       <Filter>Loader</Filter>
     </ClInclude>
@@ -71,14 +83,26 @@
     <ClInclude Include="Okdio\OKdio.h">
       <Filter>Okdio</Filter>
     </ClInclude>
-    <ClInclude Include="Okdio\Effector\Effector.h">
-      <Filter>Effector</Filter>
-    </ClInclude>
     <ClInclude Include="Okdio\Effect\Effect.h">
       <Filter>Effect</Filter>
     </ClInclude>
     <ClInclude Include="Okdio\Effect\Volume.h">
       <Filter>Effect\Volume</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\XAudio2\VoiceCallback.h">
+      <Filter>Engine\Callback</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\XAudio2\XAudio2.h">
+      <Filter>Engine\XAudio2</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\Effect\Distortion.h">
+      <Filter>Effect\Distortion</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\Effector.h">
+      <Filter>Effector</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\Effects.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

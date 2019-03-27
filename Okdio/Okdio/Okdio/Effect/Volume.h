@@ -1,7 +1,9 @@
 #pragma once
 #include "Effect.h"
 
-class Volume
+// 音量調節
+class Volume : 
+	public Effect
 {
 public:
 	// コンストラクタ

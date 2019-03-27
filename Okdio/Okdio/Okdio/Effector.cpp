@@ -1,15 +1,19 @@
 #include "Effector.h"
-#include "../OKdio.h"
-#include "../Effect/Effect.h"
+#include "OKdio.h"
+#include "Effect/Effect.h"
+#include <windows.h>
 
 // コンストラクタ
 Effector::Effector(const size_t& capacity, const size_t& threadNum) : 
 	capacity(capacity), threadFlag(true)
 {
-	th.resize(threadFlag);
-	for (std::thread& i : th)
+	if (CheckThreadNum(threadNum))
 	{
-		i = std::thread(&Effector::Stream, this);
+		th.resize(threadFlag);
+		for (std::thread& i : th)
+		{
+			i = std::thread(&Effector::Stream, this);
+		}
 	}
 }
 
@@ -40,6 +44,17 @@ bool Effector::Push(Okdio* okdio)
 	return true;
 }
 
+// スレッド立てれるかチェック
+bool Effector::CheckThreadNum(const size_t& threadNum)
+{
+	if (unsigned int(threadNum) < std::thread::hardware_concurrency())
+	{
+		return true;
+	}
+
+	return false;
+}
+
 // キューの先頭取り出し
 bool Effector::Pop(Okdio** okdio)
 {
@@ -67,7 +82,7 @@ void Effector::Execution(Okdio** okdio)
 
 	for (Effect* i : (*okdio)->effect)
 	{
-		
+		i->Execution((*okdio)->Data());
 	}
 
 	SetEvent((*okdio)->handle);

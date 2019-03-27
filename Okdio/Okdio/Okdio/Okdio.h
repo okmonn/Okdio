@@ -1,23 +1,27 @@
 #pragma once
 #include "etc/Info.h"
-#include "Effector/Effector.h"
-#include "Effect/Volume.h"
 #include <string>
 #include <vector>
 #include <memory>
-#include <xaudio2.h>
+
+struct IXAudio2SourceVoice;
+class VoiceCallback;
+class Effector;
+class Effect;
 
 // サウンドライブラリ
-class Okdio :
-	IXAudio2VoiceCallback
+class Okdio
 {
 	friend Effector;
+	friend VoiceCallback;
 public:
 	// コンストラクタ
 	Okdio();
 	Okdio(Effector* effector);
 	Okdio(const std::string& fileName);
 	Okdio(const snd::Info& info, const std::vector<float>& data);
+	Okdio(const std::string& fileName, Effector* effector);
+	Okdio(const snd::Info& info, const std::vector<float>& data, Effector* effector);
 	// コピーコンストラクタ
 	Okdio(const Okdio& okdio);
 	// デストラクタ
@@ -33,7 +37,7 @@ public:
 	void PushEffect(Effect* effect);
 
 	// エフェクトをまとめてセット
-	void SetEffect(std::initializer_list<Effect*>& effect);
+	void SetEffect(const std::initializer_list<Effect*>& effect);
 
 	// 再生
 	long Play(const bool& loop = false, const size_t& overlaidMax = 10);
@@ -63,27 +67,15 @@ private:
 	// リセット
 	void Reset(void);
 
-	// データ読み込み前に呼び出し
-	void __stdcall OnVoiceProcessingPassStart(unsigned int SamplesRequired);
-	// 新しいバッファの処理開始時に呼び出し
-	void __stdcall OnBufferStart(void* pBufferContext);
-	// バッファの処理終了時に呼び出し
-	void __stdcall OnBufferEnd(void* pBufferContext);
-	// 音声の処理パス終了時に呼び出し
-	void __stdcall OnVoiceProcessingPassEnd(void);
-	// 連続したストリーム再生終了時に呼び出し
-	void __stdcall OnStreamEnd(void) {}
-	// ループ終了位置到達時に呼び出し
-	void __stdcall OnLoopEnd(void* pBufferContext) {}
-	// エラー発生時に呼び出し
-	void __stdcall OnVoiceError(void* pBufferContext, long Error) {}
-
 	// 一回の処理データ取得
 	inline size_t Bps(void) const;
 
 	// 現在の波形情報取得
 	std::vector<float>& Data(void);
 
+
+	// ボイスコールバック
+	std::unique_ptr<VoiceCallback>back;
 
 	// エフェクター
 	Effector* effector;

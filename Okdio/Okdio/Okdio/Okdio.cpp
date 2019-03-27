@@ -1,5 +1,7 @@
 #include "OKdio.h"
+#include "Effector.h"
 #include "XAudio2/XAudio2.h"
+#include "XAudio2/VoiceCallback.h"
 #include "Loader/Loader.h"
 #include <ks.h>
 #include <ksmedia.h>
@@ -48,6 +50,22 @@ Okdio::Okdio(const snd::Info& info, const std::vector<float>& data)
 	CreateOriginal(info, data);
 }
 
+// コンストラクタ
+Okdio::Okdio(const std::string& fileName, Effector* effector)
+{
+	Init();
+	this->effector = effector;
+	Load(fileName);
+}
+
+// コンストラクタ
+Okdio::Okdio(const snd::Info& info, const std::vector<float>& data, Effector* effector)
+{
+	Init();
+	this->effector = effector;
+	CreateOriginal(info, data);
+}
+
 // コピーコンストラクタ
 Okdio::Okdio(const Okdio& okdio)
 {
@@ -66,6 +84,7 @@ Okdio::~Okdio()
 // 初期化
 void Okdio::Init(void)
 {
+	back     = std::make_unique<VoiceCallback>(this);
 	effector = nullptr;
 	handle   = CreateEventEx(nullptr, false, false, EVENT_ALL_ACCESS);
 	voice    = nullptr;
@@ -94,8 +113,8 @@ long Okdio::CreateVoice(void)
 	desc.dwChannelMask               = spk[desc.Format.nChannels - 1];
 	desc.Samples.wValidBitsPerSample = desc.Format.wBitsPerSample;
 	desc.SubFormat                   = KSDATAFORMAT_SUBTYPE_IEEE_FLOAT;
-
-	auto hr = XAudio2::Get().Audio()->CreateSourceVoice(&voice, (WAVEFORMATEX*)(&desc), 0, 1.0f, this);
+	
+	auto hr = XAudio2::Get().Audio()->CreateSourceVoice(&voice, (WAVEFORMATEX*)(&desc), 0, 1.0f, &(*back));
 #ifdef _DEBUG
 	if (FAILED(hr))
 	{
@@ -148,9 +167,11 @@ void Okdio::PushEffect(Effect* effect)
 }
 
 // エフェクトをまとめてセット
-void Okdio::SetEffect(std::initializer_list<Effect*>& effect)
+void Okdio::SetEffect(const std::initializer_list<Effect*>& effect)
 {
 	this->effect = effect;
+
+	UpData();
 }
 
 // 再生
@@ -272,35 +293,6 @@ void Okdio::Reset(void)
 		Stop();
 		read.push_back(0);
 	}
-}
-
-// データ読み込み前に呼び出し
-void __stdcall Okdio::OnVoiceProcessingPassStart(unsigned int SamplesRequired)
-{
-	if (effector != nullptr)
-	{
-		WaitForSingleObject(handle, INFINITE);
-	}
-
-	Submit();
-}
-
-// 新しいバッファの処理開始時に呼び出し
-void __stdcall Okdio::OnBufferStart(void* pBufferContext)
-{
-	UpData();
-}
-
-// バッファの処理終了時に呼び出し
-void __stdcall Okdio::OnBufferEnd(void* pBufferContext)
-{
-	CheckEnd();
-}
-
-// 音声の処理パス終了時に呼び出し
-void __stdcall Okdio::OnVoiceProcessingPassEnd(void)
-{
-	Reset();
 }
 
 // 一回の処理データ取得

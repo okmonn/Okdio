@@ -23,6 +23,9 @@ private:
 	Effector(const Effector&) = delete;
 	void operator=(const Effector&) = delete;
 
+	// スレッド立てれるかチェック
+	bool CheckThreadNum(const size_t& threadNum);
+
 	// キューの先頭取り出し
 	bool Pop(Okdio** okdio);
 
