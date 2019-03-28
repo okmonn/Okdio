@@ -82,7 +82,7 @@ void Effector::Execution(Okdio** okdio)
 
 	for (Effect* i : (*okdio)->effect)
 	{
-		i->Execution((*okdio)->Data());
+		i->Execution((*okdio));
 	}
 
 	SetEvent((*okdio)->handle);

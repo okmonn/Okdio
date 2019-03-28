@@ -12,8 +12,8 @@ class Effect;
 // サウンドライブラリ
 class Okdio
 {
-	friend Effector;
 	friend VoiceCallback;
+	friend Effector;
 public:
 	// コンストラクタ
 	Okdio();
@@ -48,6 +48,18 @@ public:
 	// 代入演算子オーバーロード
 	void operator=(const Okdio& okdio);
 
+	// サウンド情報取得
+	snd::Info GetInfo(void) const;
+
+	// 現在の波形情報取得
+	std::vector<float>& GetData(void);
+
+	// フィルタ用入出力データ取得
+	float* GetInOut(void);
+
+	// 再生終了確認
+	bool CheckPlayEnd(void) const;
+
 private:
 	// 初期化
 	void Init(void);
@@ -70,9 +82,6 @@ private:
 	// 一回の処理データ取得
 	inline size_t Bps(void) const;
 
-	// 現在の波形情報取得
-	std::vector<float>& Data(void);
-
 
 	// ボイスコールバック
 	std::unique_ptr<VoiceCallback>back;
@@ -89,6 +98,9 @@ private:
 	// ソースボイス
 	IXAudio2SourceVoice* voice;
 
+	// 再生終了フラグ
+	bool endFlag;
+
 	// ループフラグ
 	bool loop;
 
@@ -97,6 +109,9 @@ private:
 
 	// バッファ入れ替え用インデックス
 	unsigned int index;
+
+	// フィルタ用入出力
+	float inout[4];
 
 	// 波形読み込み位置
 	std::vector<size_t>read;

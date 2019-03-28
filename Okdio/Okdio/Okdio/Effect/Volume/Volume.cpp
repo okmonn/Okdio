@@ -1,4 +1,5 @@
 #include "Volume.h"
+#include "../../OKdio.h"
 
 // コンストラクタ
 Volume::Volume()
@@ -44,9 +45,9 @@ bool Volume::SetLevel(const float& level)
 }
 
 // 実行
-void Volume::Execution(std::vector<float>& data)
+void Volume::Execution(Okdio* okdio)
 {
-	for (float& i : data)
+	for (float& i : okdio->GetData())
 	{
 		i *= level;
 	}

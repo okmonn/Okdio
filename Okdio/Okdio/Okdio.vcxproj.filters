@@ -43,6 +43,12 @@
     <Filter Include="Effect\Distortion">
       <UniqueIdentifier>{eb949c1d-a12f-4ae3-a40e-366a05d07000}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Effect\Filter">
+      <UniqueIdentifier>{9ad47617-86b8-4c6e-b028-1487230c6286}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="etc\Func">
+      <UniqueIdentifier>{b693175c-a256-4c2f-b197-27c1e582c7ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -54,20 +60,26 @@
     <ClCompile Include="Okdio\OKdio.cpp">
       <Filter>Okdio</Filter>
     </ClCompile>
-    <ClCompile Include="Okdio\Effect\Volume.cpp">
-      <Filter>Effect\Volume</Filter>
-    </ClCompile>
     <ClCompile Include="Okdio\XAudio2\VoiceCallback.cpp">
       <Filter>Engine\Callback</Filter>
     </ClCompile>
     <ClCompile Include="Okdio\XAudio2\XAudio2.cpp">
       <Filter>Engine\XAudio2</Filter>
     </ClCompile>
-    <ClCompile Include="Okdio\Effect\Distortion.cpp">
-      <Filter>Effect\Distortion</Filter>
-    </ClCompile>
     <ClCompile Include="Okdio\Effector.cpp">
       <Filter>Effector</Filter>
+    </ClCompile>
+    <ClCompile Include="Okdio\Effect\Distortion\Distortion.cpp">
+      <Filter>Effect\Distortion</Filter>
+    </ClCompile>
+    <ClCompile Include="Okdio\Effect\Volume\Volume.cpp">
+      <Filter>Effect\Volume</Filter>
+    </ClCompile>
+    <ClCompile Include="Okdio\etc\Func.cpp">
+      <Filter>etc\Func</Filter>
+    </ClCompile>
+    <ClCompile Include="Okdio\Effect\Filter\Filter.cpp">
+      <Filter>Effect\Filter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -86,23 +98,29 @@
     <ClInclude Include="Okdio\Effect\Effect.h">
       <Filter>Effect</Filter>
     </ClInclude>
-    <ClInclude Include="Okdio\Effect\Volume.h">
-      <Filter>Effect\Volume</Filter>
-    </ClInclude>
     <ClInclude Include="Okdio\XAudio2\VoiceCallback.h">
       <Filter>Engine\Callback</Filter>
     </ClInclude>
     <ClInclude Include="Okdio\XAudio2\XAudio2.h">
       <Filter>Engine\XAudio2</Filter>
     </ClInclude>
-    <ClInclude Include="Okdio\Effect\Distortion.h">
-      <Filter>Effect\Distortion</Filter>
-    </ClInclude>
     <ClInclude Include="Okdio\Effector.h">
       <Filter>Effector</Filter>
     </ClInclude>
     <ClInclude Include="Okdio\Effects.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\Effect\Distortion\Distortion.h">
+      <Filter>Effect\Distortion</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\Effect\Volume\Volume.h">
+      <Filter>Effect\Volume</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\etc\Func.h">
+      <Filter>etc\Func</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\Effect\Filter\Filter.h">
+      <Filter>Effect\Filter</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -88,10 +88,12 @@ void Okdio::Init(void)
 	effector = nullptr;
 	handle   = CreateEventEx(nullptr, false, false, EVENT_ALL_ACCESS);
 	voice    = nullptr;
+	endFlag  = false;
 	loop     = false;
 	cnt      = 0;
 	index    = 0;
 	
+	memset(&inout[0], 0, sizeof(inout));
 	read.assign(1, 0);
 	data.resize(BUFFER);
 }
@@ -187,6 +189,7 @@ long Okdio::Play(const bool& loop, const size_t& overlaidMax)
 	}
 
 	this->loop = loop;
+	endFlag    = false;
 
 	cnt += (cnt + 1 >= overlaidMax) ? 0 : 1;
 	if (cnt > read.size())
@@ -292,20 +295,8 @@ void Okdio::Reset(void)
 	{
 		Stop();
 		read.push_back(0);
+		endFlag = true;
 	}
-}
-
-// 一回の処理データ取得
-inline size_t Okdio::Bps(void) const
-{
-	snd::Info info = Loader::Get().Info(name);
-	return info.sample * info.channel / 100;
-}
-
-// 現在の波形情報取得
-std::vector<float>& Okdio::Data(void)
-{
-	return data[index];
 }
 
 // 代入演算子オーバーロード
@@ -321,4 +312,35 @@ void Okdio::operator=(const Okdio& okdio)
 	}
 
 	UpData();
+}
+
+// サウンド情報取得
+snd::Info Okdio::GetInfo(void) const
+{
+	return Loader::Get().Info(name);
+}
+
+// 現在の波形情報取得
+std::vector<float>& Okdio::GetData(void)
+{
+	return data[index];
+}
+
+// フィルタ用入出力データ取得
+float* Okdio::GetInOut(void)
+{
+	return inout;
+}
+
+// 再生終了確認
+bool Okdio::CheckPlayEnd(void) const
+{
+	return endFlag;
+}
+
+// 一回の処理データ取得
+inline size_t Okdio::Bps(void) const
+{
+	snd::Info info = Loader::Get().Info(name);
+	return info.sample * info.channel / 100;
 }

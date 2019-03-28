@@ -1,5 +1,5 @@
 #pragma once
-#include "Effect.h"
+#include "../Effect.h"
 
 // ディストーション調節
 class Distortion :
@@ -25,7 +25,7 @@ private:
 	void Init(void);
 
 	// 実行
-	void Execution(std::vector<float>& data);
+	void Execution(Okdio* okdio);
 
 
 	// 増幅率

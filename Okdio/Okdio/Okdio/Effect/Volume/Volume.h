@@ -1,5 +1,5 @@
 #pragma once
-#include "Effect.h"
+#include "../Effect.h"
 
 // âπó í≤êﬂ
 class Volume : 
@@ -25,7 +25,7 @@ private:
 	void Init(void);
 
 	// é¿çs
-	void Execution(std::vector<float>& data);
+	void Execution(Okdio* okdio);
 
 
 	// âπó ÉåÉxÉã

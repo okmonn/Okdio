@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 
+class Okdio;
 class Effector;
 
 class Effect
@@ -16,6 +17,6 @@ public:
 
 private:
 	// é¿çs
-	virtual void Execution(std::vector<float>& data) {
+	virtual void Execution(Okdio* okdio) {
 	}
 };

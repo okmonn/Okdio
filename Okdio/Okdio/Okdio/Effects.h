@@ -1,3 +1,4 @@
 #pragma once
-#include "Effect/Volume.h"
-#include "Effect/Distortion.h"
+#include "Effect/Volume/Volume.h"
+#include "Effect/Distortion/Distortion.h"
+#include "Effect/Filter/Filter.h"
