@@ -47,11 +47,16 @@ bool Distortion::SetAmp(const float& amp)
 // é¿çs
 void Distortion::Execution(Okdio* okdio)
 {
+	if (amp <= 1.0f)
+	{
+		return;
+	}
+
 	for (float& i : okdio->GetData())
 	{
 		i *= amp;
-		i = std::fmin(i,  1.0f);
-		i = std::fmax(i, -1.0f);
+		i  = std::fmin(i,  1.0f);
+		i  = std::fmax(i, -1.0f);
 	}
 }
 

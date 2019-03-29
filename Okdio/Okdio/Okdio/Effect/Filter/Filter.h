@@ -11,6 +11,8 @@ namespace snd
 		LowPass,
 		HighPass,
 		BandPass,
+		Notch,
+		LowShelf,
 	};
 }
 
@@ -44,6 +46,15 @@ public:
 	// bw　0.0fより大きい数値に設定してください
 	// sample　適応させる波形のサンプリング周波数
 	bool BandPass(const float& cutoff, const float& bw, const unsigned short& sample = 44100);
+
+	// ノッチフィルタ
+	// cutoff　最小値：10.0f、最大値：sampleの半分未満（10の位から切り捨てを行っています）
+	// bw　0.0fより大きい数値に設定してください
+	// sample　適応させる波形のサンプリング周波数	
+	bool Notch(const float& cutoff, const float& bw, const unsigned short& sample = 44100);
+
+	// ローシェルフフィルタ
+	bool LowShelf(const float& cutoff, const float& q, const float& gain, const unsigned short& sample = 44100);
 
 	// 代入演算子オーバーロード
 	void operator=(const Filter& filter);

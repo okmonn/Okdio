@@ -128,7 +128,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="FPS.cpp" />
-    <ClCompile Include="FPSCounter.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Okdio\Effector.cpp" />
     <ClCompile Include="Okdio\Effect\Distortion\Distortion.cpp" />
@@ -143,7 +142,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FPS.h" />
-    <ClInclude Include="FPSCounter.h" />
     <ClInclude Include="Okdio\Effector.h" />
     <ClInclude Include="Okdio\Effects.h" />
     <ClInclude Include="Okdio\Effect\Distortion\Distortion.h" />

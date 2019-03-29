@@ -1,13 +1,10 @@
 #include "Okdio/OKdio.h"
 #include "Okdio/Effector.h"
 #include "Okdio/Effects.h"
-#include "FPSCounter.h"
 #include <Windows.h>
 
 int main()
 {
-	CFPSCounter FPS(10);
-
 	Effector effe(10, 2);
 	Pan pan(0.0f);
 	Okdio s("mtgx.wav", &effe);
@@ -51,8 +48,6 @@ int main()
 			}
 			pan.SetPanning(angle);
 		}
-
-		printf("%lf\n", FPS.GetFPS());
 	}
 
 	return 0;
