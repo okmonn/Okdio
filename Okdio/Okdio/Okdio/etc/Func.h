@@ -1,8 +1,12 @@
 #pragma once
+#include <string>
 #include <vector>
 
 namespace snd
 {
+	// サウンドデータ削除
+	void Delete(const std::string& fileName);
+
 	// 任意の桁から切り捨て
 	float Floor(const float& input, const int& digit);
 

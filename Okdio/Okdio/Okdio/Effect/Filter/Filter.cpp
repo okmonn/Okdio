@@ -15,10 +15,11 @@ Filter::Filter()
 Filter::Filter(const snd::FilterType& type, const float& cutoff, const float& q, const unsigned short& sample)
 {
 	Init();
+	InitFunc();
 
-	if (type == snd::FilterType::LowPass)
+	if (func.find(type) != func.end())
 	{
-		LowPass(cutoff, q, sample);
+		func[type](cutoff, q, sample);
 	}
 }
 
@@ -42,11 +43,24 @@ void Filter::Init(void)
 	a[0] = b[0] = 1.0f;
 }
 
+// 関数ポインタ初期化
+void Filter::InitFunc(void)
+{
+	func[snd::FilterType::LowPass]  = std::bind(&Filter::LowPass,  this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+	func[snd::FilterType::HighPass] = std::bind(&Filter::HighPass, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+	func[snd::FilterType::BandPass] = std::bind(&Filter::BandPass, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+}
+
 // ローパスフィルタ
 bool Filter::LowPass(const float& cutoff, const float& q, const unsigned short& sample)
 {
 	if (cutoff < CUT_MIN
 		|| cutoff > snd::Floor(float(sample / 2), 3))
+	{
+		return false;
+	}
+
+	if (q <= 0.0f)
 	{
 		return false;
 	}
@@ -61,6 +75,62 @@ bool Filter::LowPass(const float& cutoff, const float& q, const unsigned short& 
 	b[0] = (1.0f - std::cos(omega)) / 2.0f;
 	b[1] =  1.0f - std::cos(omega);
 	b[2] = (1.0f - std::cos(omega)) / 2.0f;
+
+	return true;
+}
+
+// ハイパスフィルタ
+bool Filter::HighPass(const float& cutoff, const float& q, const unsigned short& sample)
+{
+	if (cutoff < CUT_MIN
+		|| cutoff > snd::Floor(float(sample / 2), 3))
+	{
+		return false;
+	}
+
+	if (q <= 0.0f)
+	{
+		return false;
+	}
+
+	float omega = 2.0f * snd::PI() * cutoff / sample;
+	float alpha = std::sin(omega) / 2.0f * q;
+
+	a[0] =  1.0f + alpha;
+	a[1] = -2.0f * std::cos(omega);
+	a[2] =  1.0f - alpha;
+
+	b[0] =  (1.0f + std::cos(omega)) / 2.0f;
+	b[1] = -(1.0f + std::cos(omega));
+	b[2] =  (1.0f + std::cos(omega)) / 2.0f;
+
+	return true;
+}
+
+// バンドパスフィルタ
+bool Filter::BandPass(const float& cutoff, const float& bw, const unsigned short& sample)
+{
+	if (cutoff < CUT_MIN
+		|| cutoff > snd::Floor(float(sample / 2), 3))
+	{
+		return false;
+	}
+
+	if (bw <= 0.0f)
+	{
+		return false;
+	}
+
+	float omega = 2.0f * snd::PI() * cutoff / sample;
+	float alpha = std::sin(omega) * std::sinh(std::log(2.0f) / 2.0f * bw * omega / std::sin(omega));
+
+	a[0] =  1.0f + alpha;
+	a[1] = -2.0f * std::cos(omega);
+	a[2] =  1.0f - alpha;
+
+	b[0] =  alpha;
+	b[1] =  0.0f;
+	b[2] = -alpha;
 
 	return true;
 }

@@ -34,7 +34,8 @@ void Volume::Init(void)
 // 音量レベルセット
 bool Volume::SetLevel(const float& level)
 {
-	if (level < 0.0f)
+	if (level < 0.0f 
+		|| level > 1.0f)
 	{
 		return false;
 	}

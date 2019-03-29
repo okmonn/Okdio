@@ -1,4 +1,11 @@
 #include "Func.h"
+#include "../Loader/Loader.h"
+
+// サウンドデータ削除
+void snd::Delete(const std::string& fileName)
+{
+	Loader::Get().Delete(fileName);
+}
 
 // 任意の桁から切り捨て
 float snd::Floor(const float& input, const int& digit)

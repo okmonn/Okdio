@@ -1,21 +1,21 @@
 #include "Okdio/OKdio.h"
 #include "Okdio/Effector.h"
 #include "Okdio/Effects.h"
+#include "FPSCounter.h"
 #include <Windows.h>
 
 int main()
 {
+	CFPSCounter FPS(10);
+
 	Effector effe(10, 2);
-	Volume vol(1.0f);
-	Distortion dis(100.0f);
-	Filter low(snd::FilterType::LowPass, 100.0f, 1.0f / std::sqrt(2.0f));
-	Okdio s("mtgx.wav");
-	auto a = s.GetInfo();
-	s.PushEffect(&low);
-	s.SetEffect({ &vol, &dis, &low });
+	Pan pan(0.0f);
+	Okdio s("mtgx.wav", &effe);
+	s.PushEffect(&pan);
+	//s.SetEffect({ &vol, &dis, &low });
 	s.Play(false, 10);
-	auto eb = s;
 	
+	float angle = 0.0f;
 	bool input = false;
 	while (!(GetKeyState(VK_ESCAPE) & 0x80))
 	{
@@ -31,6 +31,28 @@ int main()
 		{
 			input = false;
 		}
+
+		const float tmp = 0.05f;
+		if (GetKeyState(VK_RIGHT) & 0x80)
+		{
+			angle += tmp;
+			if (angle > 90.0f)
+			{
+				angle = 90.0f;
+			}
+			pan.SetPanning(angle);
+		}
+		else if (GetKeyState(VK_LEFT) & 0x80)
+		{
+			angle -= tmp;
+			if (angle < -90.0f)
+			{
+				angle = -90.0f;
+			}
+			pan.SetPanning(angle);
+		}
+
+		printf("%lf\n", FPS.GetFPS());
 	}
 
 	return 0;

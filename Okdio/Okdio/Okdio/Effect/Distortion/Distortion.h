@@ -15,6 +15,7 @@ public:
 	~Distortion();
 
 	// 増幅率セット
+	// amp　最小値：1.0f
 	bool SetAmp(const float& amp);
 
 	// 代入演算子オーバーロード

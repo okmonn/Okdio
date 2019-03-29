@@ -55,6 +55,16 @@ std::string Loader::Create(const snd::Info& info, const std::vector<float>& data
 	return original;
 }
 
+// サウンドデータ削除
+void Loader::Delete(const std::string& fileName)
+{
+	if (info.find(fileName) != info.end())
+	{
+		info.erase(info.find(fileName));
+		data.erase(data.find(fileName));
+	}
+}
+
 // インスタンス変数取得
 Loader& Loader::Get(void)
 {

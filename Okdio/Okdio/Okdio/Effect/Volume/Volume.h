@@ -15,6 +15,7 @@ public:
 	~Volume();
 
 	// 音量レベルセット
+	// level　最小値：0.0f、最大値：1.0f
 	bool SetLevel(const float& level);
 
 	// 代入演算子オーバーロード

@@ -1,5 +1,6 @@
 #pragma once
 #include "etc/Info.h"
+#include "etc/Func.h"
 #include <string>
 #include <vector>
 #include <memory>
@@ -40,6 +41,8 @@ public:
 	void SetEffect(const std::initializer_list<Effect*>& effect);
 
 	// 再生
+	// loop　false：ループしない、true：ループする
+	// overlaidMax　ディレイの重ね掛け最大値を設定してください
 	long Play(const bool& loop = false, const size_t& overlaidMax = 10);
 
 	// 停止
@@ -51,14 +54,17 @@ public:
 	// サウンド情報取得
 	snd::Info GetInfo(void) const;
 
+	// 再生終了確認
+	bool IsPlayEnd(void) const;
+
+	// 参照ファイルパス取得
+	std::string GetName(void) const;
+
 	// 現在の波形情報取得
 	std::vector<float>& GetData(void);
 
 	// フィルタ用入出力データ取得
 	float* GetInOut(void);
-
-	// 再生終了確認
-	bool CheckPlayEnd(void) const;
 
 private:
 	// 初期化

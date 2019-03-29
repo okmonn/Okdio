@@ -18,6 +18,9 @@ public:
 	// オリジナル波形登録
 	std::string Create(const snd::Info& info, const std::vector<float>& data);
 
+	// サウンドデータ削除
+	void Delete(const std::string& fileName);
+
 	// インスタンス変数取得
 	static Loader& Get(void);
 

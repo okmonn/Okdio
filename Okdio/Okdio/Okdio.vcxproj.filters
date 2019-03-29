@@ -49,6 +49,12 @@
     <Filter Include="etc\Func">
       <UniqueIdentifier>{b693175c-a256-4c2f-b197-27c1e582c7ed}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Effect\Pan">
+      <UniqueIdentifier>{f728cdaa-8b42-462d-9429-4077a18612bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FPS">
+      <UniqueIdentifier>{7f3699da-02a7-4ce5-ac58-df9b9d7a27dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -80,6 +86,15 @@
     </ClCompile>
     <ClCompile Include="Okdio\Effect\Filter\Filter.cpp">
       <Filter>Effect\Filter</Filter>
+    </ClCompile>
+    <ClCompile Include="Okdio\Effect\Pan\Pan.cpp">
+      <Filter>Effect\Pan</Filter>
+    </ClCompile>
+    <ClCompile Include="FPS.cpp">
+      <Filter>FPS</Filter>
+    </ClCompile>
+    <ClCompile Include="FPSCounter.cpp">
+      <Filter>ヘッダー ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -121,6 +136,15 @@
     </ClInclude>
     <ClInclude Include="Okdio\Effect\Filter\Filter.h">
       <Filter>Effect\Filter</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\Effect\Pan\Pan.h">
+      <Filter>Effect\Pan</Filter>
+    </ClInclude>
+    <ClInclude Include="FPS.h">
+      <Filter>FPS</Filter>
+    </ClInclude>
+    <ClInclude Include="FPSCounter.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

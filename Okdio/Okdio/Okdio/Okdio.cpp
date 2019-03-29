@@ -320,6 +320,18 @@ snd::Info Okdio::GetInfo(void) const
 	return Loader::Get().Info(name);
 }
 
+// 再生終了確認
+bool Okdio::IsPlayEnd(void) const
+{
+	return endFlag;
+}
+
+// 参照ファイルパス取得
+std::string Okdio::GetName(void) const
+{
+	return name;
+}
+
 // 現在の波形情報取得
 std::vector<float>& Okdio::GetData(void)
 {
@@ -330,12 +342,6 @@ std::vector<float>& Okdio::GetData(void)
 float* Okdio::GetInOut(void)
 {
 	return inout;
-}
-
-// 再生終了確認
-bool Okdio::CheckPlayEnd(void) const
-{
-	return endFlag;
 }
 
 // 一回の処理データ取得
