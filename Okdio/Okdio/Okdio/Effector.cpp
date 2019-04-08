@@ -1,5 +1,5 @@
 #include "Effector.h"
-#include "OKdio.h"
+#include "Okdio.h"
 #include "Effect/Effect.h"
 #include <windows.h>
 

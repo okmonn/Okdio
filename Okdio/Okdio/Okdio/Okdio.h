@@ -17,12 +17,9 @@ class Okdio
 	friend Effector;
 public:
 	// コンストラクタ
-	Okdio();
-	Okdio(Effector* effector);
-	Okdio(const std::string& fileName);
-	Okdio(const snd::Info& info, const std::vector<float>& data);
-	Okdio(const std::string& fileName, Effector* effector);
-	Okdio(const snd::Info& info, const std::vector<float>& data, Effector* effector);
+	Okdio(Effector* effector = nullptr);
+	Okdio(const std::string& fileName, Effector* effector = nullptr);
+	Okdio(const snd::Info& info, const std::vector<float>& data, Effector* effector = nullptr);
 	// コピーコンストラクタ
 	Okdio(const Okdio& okdio);
 	// デストラクタ

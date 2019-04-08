@@ -1,4 +1,5 @@
 #pragma once
+#include "Effects.h"
 #include <deque>
 #include <mutex>
 #include <vector>

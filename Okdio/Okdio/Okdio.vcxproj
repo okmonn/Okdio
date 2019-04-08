@@ -136,7 +136,7 @@
     <ClCompile Include="Okdio\Effect\Volume\Volume.cpp" />
     <ClCompile Include="Okdio\etc\Func.cpp" />
     <ClCompile Include="Okdio\Loader\Loader.cpp" />
-    <ClCompile Include="Okdio\OKdio.cpp" />
+    <ClCompile Include="Okdio\Okdio.cpp" />
     <ClCompile Include="Okdio\XAudio2\VoiceCallback.cpp" />
     <ClCompile Include="Okdio\XAudio2\XAudio2.cpp" />
   </ItemGroup>
@@ -153,7 +153,7 @@
     <ClInclude Include="Okdio\etc\Info.h" />
     <ClInclude Include="Okdio\etc\WaveFmt.h" />
     <ClInclude Include="Okdio\Loader\Loader.h" />
-    <ClInclude Include="Okdio\OKdio.h" />
+    <ClInclude Include="Okdio\Okdio.h" />
     <ClInclude Include="Okdio\XAudio2\VoiceCallback.h" />
     <ClInclude Include="Okdio\XAudio2\XAudio2.h" />
   </ItemGroup>

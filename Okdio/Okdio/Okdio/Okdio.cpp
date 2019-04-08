@@ -1,4 +1,4 @@
-#include "OKdio.h"
+#include "Okdio.h"
 #include "Effector.h"
 #include "XAudio2/XAudio2.h"
 #include "XAudio2/VoiceCallback.h"
@@ -22,47 +22,29 @@ const unsigned long spk[] = {
 // バッファ最大数
 #define BUFFER 2
 
+// 波形処理範囲のオフセット
+#define OFFSET 100
+
 // コンストラクタ
-Okdio::Okdio()
+Okdio::Okdio(Effector* effector) : 
+	effector(effector)
 {
 	Init();
 }
 
 // コンストラクタ
-Okdio::Okdio(Effector* effector)
-{
-	Init();
-
-	this->effector = effector;
-}
-
-// コンストラクタ
-Okdio::Okdio(const std::string& fileName)
+Okdio::Okdio(const std::string& fileName, Effector* effector) : 
+	effector(effector)
 {
 	Init();
 	Load(fileName);
 }
 
 // コンストラクタ
-Okdio::Okdio(const snd::Info& info, const std::vector<float>& data)
+Okdio::Okdio(const snd::Info& info, const std::vector<float>& data, Effector* effector) : 
+	effector(effector)
 {
 	Init();
-	CreateOriginal(info, data);
-}
-
-// コンストラクタ
-Okdio::Okdio(const std::string& fileName, Effector* effector)
-{
-	Init();
-	this->effector = effector;
-	Load(fileName);
-}
-
-// コンストラクタ
-Okdio::Okdio(const snd::Info& info, const std::vector<float>& data, Effector* effector)
-{
-	Init();
-	this->effector = effector;
 	CreateOriginal(info, data);
 }
 
@@ -85,7 +67,6 @@ Okdio::~Okdio()
 void Okdio::Init(void)
 {
 	back     = std::make_unique<VoiceCallback>(this);
-	effector = nullptr;
 	handle   = CreateEventEx(nullptr, false, false, EVENT_ALL_ACCESS);
 	voice    = nullptr;
 	endFlag  = false;
@@ -348,5 +329,5 @@ float* Okdio::GetInOut(void)
 inline size_t Okdio::Bps(void) const
 {
 	snd::Info info = Loader::Get().Info(name);
-	return info.sample * info.channel / 100;
+	return info.sample * info.channel / OFFSET;
 }

@@ -60,9 +60,6 @@
     <ClCompile Include="Okdio\Loader\Loader.cpp">
       <Filter>Loader</Filter>
     </ClCompile>
-    <ClCompile Include="Okdio\OKdio.cpp">
-      <Filter>Okdio</Filter>
-    </ClCompile>
     <ClCompile Include="Okdio\XAudio2\VoiceCallback.cpp">
       <Filter>Engine\Callback</Filter>
     </ClCompile>
@@ -93,6 +90,9 @@
     <ClCompile Include="Main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Okdio\Okdio.cpp">
+      <Filter>Okdio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Okdio\Loader\Loader.h">
@@ -103,9 +103,6 @@
     </ClInclude>
     <ClInclude Include="Okdio\etc\WaveFmt.h">
       <Filter>etc</Filter>
-    </ClInclude>
-    <ClInclude Include="Okdio\OKdio.h">
-      <Filter>Okdio</Filter>
     </ClInclude>
     <ClInclude Include="Okdio\Effect\Effect.h">
       <Filter>Effect</Filter>
@@ -139,6 +136,9 @@
     </ClInclude>
     <ClInclude Include="FPS.h">
       <Filter>FPS</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\Okdio.h">
+      <Filter>Okdio</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
