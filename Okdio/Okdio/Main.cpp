@@ -1,6 +1,7 @@
 #include "Okdio/Okdio.h"
 #include "Okdio/Effector.h"
 #include <Windows.h>
+#define KEYA
 
 int main()
 {
@@ -16,10 +17,16 @@ int main()
 	s.Play();
 
 	//再生終了までループ
-	while (!s.IsPlayEnd())
+#ifdef KEY
+	while (!(GetKeyState(VK_ESCAPE) & 0x80))
+#else
+	while(!s.IsPlayEnd())
+#endif
 	{
 
 	}
+
+	s.Stop();
 
 	//波形データ削除
 	snd::Delete(s.GetName());

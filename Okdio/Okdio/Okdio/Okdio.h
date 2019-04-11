@@ -1,9 +1,11 @@
 #pragma once
 #include "etc/Info.h"
 #include "etc/Func.h"
+#include <mutex>
 #include <string>
 #include <vector>
 #include <memory>
+#include <condition_variable>
 
 struct IXAudio2SourceVoice;
 class VoiceCallback;
@@ -95,11 +97,17 @@ private:
 	// 参照ファイル名
 	std::string name;
 
-	// イベントハンドル
-	void* handle;
+	// 排他制御
+	std::mutex mtx;
+
+	// スレッド同期
+	std::condition_variable cv;
 
 	// ソースボイス
 	IXAudio2SourceVoice* voice;
+
+	// スレッド待機フラグ
+	bool ready;
 
 	// 再生終了フラグ
 	bool endFlag;

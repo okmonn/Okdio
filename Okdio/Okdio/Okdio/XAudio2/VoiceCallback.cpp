@@ -15,11 +15,6 @@ VoiceCallback::~VoiceCallback()
 // データ読み込み前に呼び出し
 void __stdcall VoiceCallback::OnVoiceProcessingPassStart(unsigned int SamplesRequired)
 {
-	if (okdio->effector != nullptr)
-	{
-		WaitForSingleObject(okdio->handle, INFINITE);
-	}
-
 	okdio->Submit();
 }
 

@@ -77,9 +77,6 @@ bool Effector::Pop(Okdio** okdio)
 // エフェクト処理実行
 void Effector::Execution(Okdio** okdio)
 {
-	std::mutex mtx;
-	std::unique_lock<std::mutex>lock(mtx);
-
 	for (Effect* i : (*okdio)->effect)
 	{
 		if ((*okdio)->effect.size() <= 0)
@@ -90,7 +87,10 @@ void Effector::Execution(Okdio** okdio)
 		i->Execution((*okdio));
 	}
 
-	SetEvent((*okdio)->handle);
+	std::lock_guard<std::mutex>lock(mtx);
+	(*okdio)->ready = true;
+
+	(*okdio)->cv.notify_all();
 }
 
 // 非同期

@@ -1,5 +1,6 @@
 #include "Distortion.h"
 #include "../../OKdio.h"
+#include <algorithm>
 
 // コンストラクタ
 Distortion::Distortion()
@@ -55,8 +56,8 @@ void Distortion::Execution(Okdio* okdio)
 	for (float& i : okdio->GetData())
 	{
 		i *= amp;
-		i  = std::fmin(i,  1.0f);
-		i  = std::fmax(i, -1.0f);
+		i  = std::min(i,  1.0f);
+		i  = std::max(i, -1.0f);
 	}
 }
 

@@ -50,7 +50,6 @@ void Filter::InitFunc(void)
 	func[snd::FilterType::HighPass] = std::bind(&Filter::HighPass, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
 	func[snd::FilterType::BandPass] = std::bind(&Filter::BandPass, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
 	func[snd::FilterType::Notch]    = std::bind(&Filter::Notch,    this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
-	func[snd::FilterType::LowShelf];
 }
 
 // ローパスフィルタ

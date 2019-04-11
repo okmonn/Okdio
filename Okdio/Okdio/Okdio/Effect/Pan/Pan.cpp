@@ -1,5 +1,6 @@
 #include "Pan.h"
 #include "../../OKdio.h"
+#include <cmath>
 
 #define RAD(X) (X) * snd::PI() / 180.0f
 

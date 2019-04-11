@@ -57,6 +57,12 @@ Okdio::Okdio(const Okdio& okdio)
 // デストラクタ
 Okdio::~Okdio()
 {
+	if (effector != nullptr)
+	{
+		std::unique_lock<std::mutex>lock(mtx);
+		cv.wait(lock, [this] { return ready; });
+	}
+
 	if (voice != nullptr)
 	{
 		voice->DestroyVoice();
@@ -67,8 +73,8 @@ Okdio::~Okdio()
 void Okdio::Init(void)
 {
 	back     = std::make_unique<VoiceCallback>(this);
-	handle   = CreateEventEx(nullptr, false, false, EVENT_ALL_ACCESS);
 	voice    = nullptr;
+	ready    = false;
 	endFlag  = false;
 	loop     = false;
 	cnt      = 0;
@@ -169,8 +175,9 @@ long Okdio::Play(const bool& loop, const size_t& overlaidMax)
 		return hr;
 	}
 
-	this->loop = loop;
+	ready      = false;
 	endFlag    = false;
+	this->loop = loop;
 
 	cnt += (cnt + 1 >= overlaidMax) ? 0 : 1;
 	if (cnt > read.size())
@@ -188,6 +195,7 @@ long Okdio::Stop(void)
 	if (FAILED(hr))
 	{
 		OutputDebugStringA("\n停止：失敗\n");
+		return hr;
 	}
 
 	return hr;
@@ -196,6 +204,12 @@ long Okdio::Stop(void)
 // 波形データをボイスバッファに追加
 long Okdio::Submit(void)
 {
+	if (effector != nullptr)
+	{
+		std::unique_lock<std::mutex>lock(mtx);
+		cv.wait(lock, [this] { return ready; });
+	}
+
 	XAUDIO2_BUFFER buf{};
 	buf.AudioBytes = unsigned int(sizeof(float) * data[index].size());
 	buf.pAudioData = (unsigned char*)(data[index].data());

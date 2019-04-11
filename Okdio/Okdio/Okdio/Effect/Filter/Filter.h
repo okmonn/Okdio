@@ -54,6 +54,10 @@ public:
 	bool Notch(const float& cutoff, const float& bw, const unsigned short& sample = 44100);
 
 	// ローシェルフフィルタ
+	// cutoff　最小値：10.0f、最大値：sampleの半分未満（10の位から切り捨てを行っています）
+	// q　0.0fより大きい数値に設定してください
+	// gain　特になし
+	// sample　適応させる波形のサンプリング周波数
 	bool LowShelf(const float& cutoff, const float& q, const float& gain, const unsigned short& sample = 44100);
 
 	// 代入演算子オーバーロード
