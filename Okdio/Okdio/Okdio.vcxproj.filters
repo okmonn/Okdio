@@ -140,5 +140,8 @@
     <ClInclude Include="Okdio\Okdio.h">
       <Filter>Okdio</Filter>
     </ClInclude>
+    <ClInclude Include="Okdio\etc\OggFmt.h">
+      <Filter>etc</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

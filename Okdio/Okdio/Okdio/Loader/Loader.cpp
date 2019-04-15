@@ -1,5 +1,6 @@
 #include "Loader.h"
 #include "../etc/WaveFmt.h"
+#include "../etc/OggFmt.h"
 
 // コンストラクタ
 Loader::Loader() : 
@@ -16,6 +17,7 @@ Loader::~Loader()
 // 初期化
 void Loader::Init(void)
 {
+	//WAVE
 	func[".wav"] = [&](const std::string& fileName)->int {
 		if (info.find(fileName) != info.end())
 		{
@@ -23,6 +25,23 @@ void Loader::Init(void)
 		}
 
 		int hr = wav::Load(fileName, info[fileName], data[fileName]);
+		if (hr != 0)
+		{
+			info.erase(info.find(fileName));
+			data.erase(data.find(fileName));
+		}
+
+		return hr;
+	};
+
+	//OGG
+	func[".ogg"] = [&](const std::string & fileName)->int {
+		if (info.find(fileName) != info.end())
+		{
+			return 0;
+		}
+
+		int hr = ogg::Load(fileName, info[fileName], data[fileName]);
 		if (hr != 0)
 		{
 			info.erase(info.find(fileName));

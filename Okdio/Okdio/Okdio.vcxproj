@@ -151,6 +151,7 @@
     <ClInclude Include="Okdio\Effect\Volume\Volume.h" />
     <ClInclude Include="Okdio\etc\Func.h" />
     <ClInclude Include="Okdio\etc\Info.h" />
+    <ClInclude Include="Okdio\etc\OggFmt.h" />
     <ClInclude Include="Okdio\etc\WaveFmt.h" />
     <ClInclude Include="Okdio\Loader\Loader.h" />
     <ClInclude Include="Okdio\Okdio.h" />
