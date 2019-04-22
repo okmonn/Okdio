@@ -55,6 +55,9 @@
     <Filter Include="FPS">
       <UniqueIdentifier>{7f3699da-02a7-4ce5-ac58-df9b9d7a27dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Effect\TimeStretch">
+      <UniqueIdentifier>{366792d3-483a-45de-809f-bcd4b984542e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Okdio\Loader\Loader.cpp">
@@ -92,6 +95,9 @@
     </ClCompile>
     <ClCompile Include="Okdio\Okdio.cpp">
       <Filter>Okdio</Filter>
+    </ClCompile>
+    <ClCompile Include="Okdio\Effect\TimeStretch\TimeStretch.cpp">
+      <Filter>Effect\TimeStretch</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +148,9 @@
     </ClInclude>
     <ClInclude Include="Okdio\etc\OggFmt.h">
       <Filter>etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\Effect\TimeStretch\TimeStretch.h">
+      <Filter>Effect\TimeStretch</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

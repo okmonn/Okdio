@@ -12,7 +12,7 @@ namespace snd
 		HighPass,
 		BandPass,
 		Notch,
-		LowShelf,
+		//LowShelf,
 	};
 }
 
@@ -81,5 +81,5 @@ private:
 	float b[3];
 
 	// ŠÖ”ƒ|ƒCƒ“ƒ^
-	std::unordered_map<snd::FilterType, std::function<bool(const float&, const float&, const unsigned short&)>>func;
+	std::unordered_map<snd::FilterType, std::function<bool(const float&, const float&, const unsigned short&)>>func1;
 };

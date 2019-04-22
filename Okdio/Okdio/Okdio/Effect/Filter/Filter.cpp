@@ -9,6 +9,7 @@
 Filter::Filter()
 {
 	Init();
+	InitFunc();
 }
 
 // コンストラクタ
@@ -17,9 +18,9 @@ Filter::Filter(const snd::FilterType& type, const float& cutoff, const float& q,
 	Init();
 	InitFunc();
 
-	if (func.find(type) != func.end())
+	if (func1.find(type) != func1.end())
 	{
-		func[type](cutoff, q, sample);
+		func1[type](cutoff, q, sample);
 	}
 }
 
@@ -46,10 +47,10 @@ void Filter::Init(void)
 // 関数ポインタ初期化
 void Filter::InitFunc(void)
 {
-	func[snd::FilterType::LowPass]  = std::bind(&Filter::LowPass,  this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
-	func[snd::FilterType::HighPass] = std::bind(&Filter::HighPass, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
-	func[snd::FilterType::BandPass] = std::bind(&Filter::BandPass, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
-	func[snd::FilterType::Notch]    = std::bind(&Filter::Notch,    this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+	func1[snd::FilterType::LowPass]  = std::bind(&Filter::LowPass,  this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+	func1[snd::FilterType::HighPass] = std::bind(&Filter::HighPass, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+	func1[snd::FilterType::BandPass] = std::bind(&Filter::BandPass, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+	func1[snd::FilterType::Notch]    = std::bind(&Filter::Notch,    this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
 }
 
 // ローパスフィルタ

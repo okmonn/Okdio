@@ -79,11 +79,6 @@ void Effector::Execution(Okdio** okdio)
 {
 	for (Effect* i : (*okdio)->effect)
 	{
-		if ((*okdio)->effect.size() <= 0)
-		{
-			break;
-		}
-
 		i->Execution((*okdio));
 	}
 
