@@ -12,7 +12,7 @@ int main()
 	//エフェクト生成
 	TimeStretch time(2.0f);
 	//エフェクトの追加
-	//s.PushEffect(&time);
+	s.PushEffect(&time);
 	//再生
 	s.Play();
 

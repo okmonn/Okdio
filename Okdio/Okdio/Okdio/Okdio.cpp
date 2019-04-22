@@ -59,14 +59,15 @@ Okdio::~Okdio()
 {
 	if (effector != nullptr)
 	{
-		std::unique_lock<std::mutex>lock(mtx);
-		cv.wait(lock, [this] { return ready; });
+		WaitForSingleObject(handle, INFINITE);
 	}
 
 	if (voice != nullptr)
 	{
 		voice->DestroyVoice();
 	}
+
+	CloseHandle(handle);
 }
 
 // èâä˙âª
@@ -74,7 +75,7 @@ void Okdio::Init(void)
 {
 	back     = std::make_unique<VoiceCallback>(this);
 	voice    = nullptr;
-	ready    = false;
+	handle   = CreateEventEx(nullptr, false, false, EVENT_ALL_ACCESS);
 	endFlag  = false;
 	loop     = false;
 	cnt      = 0;
@@ -175,7 +176,6 @@ long Okdio::Play(const bool& loop, const size_t& overlaidMax)
 		return hr;
 	}
 
-	ready      = false;
 	endFlag    = false;
 	this->loop = loop;
 
@@ -206,8 +206,7 @@ long Okdio::Submit(void)
 {
 	if (effector != nullptr)
 	{
-		std::unique_lock<std::mutex>lock(mtx);
-		cv.wait(lock, [this] { return ready; });
+		WaitForSingleObject(handle, INFINITE);
 	}
 
 	XAUDIO2_BUFFER buf{};

@@ -82,10 +82,7 @@ void Effector::Execution(Okdio** okdio)
 		i->Execution((*okdio));
 	}
 
-	std::lock_guard<std::mutex>lock(mtx);
-	(*okdio)->ready = true;
-
-	(*okdio)->cv.notify_all();
+	SetEvent((*okdio)->handle);
 }
 
 // ”ñ“¯Šú
