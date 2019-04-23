@@ -10,9 +10,9 @@ int main()
 	//ライブラリ本体
 	Okdio s("mtgx2.wav", &effe);
 	//エフェクト生成
-	TimeStretch time(2.0f);
+	Volume vol(1.0f);
 	//エフェクトの追加
-	s.PushEffect(&time);
+	s.PushEffect(&vol);
 	//再生
 	s.Play();
 

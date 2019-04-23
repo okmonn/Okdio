@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <complex>
 
 namespace snd
 {
@@ -14,8 +15,10 @@ namespace snd
 	inline constexpr float PI(void);
 
 	// 離散フーリエ変換
-	void DFT(const std::vector<float>& data, std::vector<float>& real, std::vector<float>& imag);
+	void DFT(const std::vector<float>& data, std::vector<std::complex<float>>& arg);
+	void DFT(const std::vector<double>& data, std::vector<std::complex<double>>& arg);
 
 	// 逆離散フーリエ変換
-	std::vector<float> IDFT(const std::vector<float>& real, const std::vector<float>& imag);
+	std::vector<float> IDFT(const std::vector<std::complex<float>>& arg);
+	std::vector<double> IDFT(const std::vector<std::complex<double>>& arg);
 }

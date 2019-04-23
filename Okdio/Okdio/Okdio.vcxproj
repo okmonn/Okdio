@@ -133,7 +133,6 @@
     <ClCompile Include="Okdio\Effect\Distortion\Distortion.cpp" />
     <ClCompile Include="Okdio\Effect\Filter\Filter.cpp" />
     <ClCompile Include="Okdio\Effect\Pan\Pan.cpp" />
-    <ClCompile Include="Okdio\Effect\TimeStretch\TimeStretch.cpp" />
     <ClCompile Include="Okdio\Effect\Volume\Volume.cpp" />
     <ClCompile Include="Okdio\etc\Func.cpp" />
     <ClCompile Include="Okdio\Loader\Loader.cpp" />
@@ -149,7 +148,6 @@
     <ClInclude Include="Okdio\Effect\Effect.h" />
     <ClInclude Include="Okdio\Effect\Filter\Filter.h" />
     <ClInclude Include="Okdio\Effect\Pan\Pan.h" />
-    <ClInclude Include="Okdio\Effect\TimeStretch\TimeStretch.h" />
     <ClInclude Include="Okdio\Effect\Volume\Volume.h" />
     <ClInclude Include="Okdio\etc\Func.h" />
     <ClInclude Include="Okdio\etc\Info.h" />

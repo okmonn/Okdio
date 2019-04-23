@@ -25,34 +25,77 @@ constexpr float snd::PI(void)
 }
 
 // 離散フーリエ変換
-void snd::DFT(const std::vector<float>& data, std::vector<float>& real, std::vector<float>& imag)
+void snd::DFT(const std::vector<float>& data, std::vector<std::complex<float>>& arg)
 {
 	size_t size = data.size();
-	real.assign(size, 0.0f);
-	imag.assign(size, 0.0f);
+	arg.assign(size, 0.0f);
 
 	for (size_t i = 0; i < size; ++i)
 	{
+		float real = 0.0f;
+		float imag = 0.0f;
 		for (size_t n = 0; n < size; ++n)
 		{
-			real[i] +=  data[n] * std::cos(2.0f * snd::PI() * i * n / size);
-			imag[i] += -data[n] * std::sin(2.0f * snd::PI() * i * n / size);
+			real +=  data[n] * std::cos(2.0f * snd::PI() * i * n / size);
+			imag += -data[n] * std::sin(2.0f * snd::PI() * i * n / size);
 		}
+
+		arg[i] = { real, imag };
+	}
+}
+
+// 離散フーリエ変換
+void snd::DFT(const std::vector<double>& data, std::vector<std::complex<double>>& arg)
+{
+	size_t size = data.size();
+	arg.assign(size, 0.0);
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		double real = 0.0;
+		double imag = 0.0;
+		for (size_t n = 0; n < size; ++n)
+		{
+			real +=  data[n] * std::cos(2.0 * double(snd::PI()) * i * n / size);
+			imag += -data[n] * std::sin(2.0 * double(snd::PI()) * i * n / size);
+		}
+
+		arg[i] = { real, imag };
 	}
 }
 
 // 逆離散フーリエ変換
-std::vector<float> snd::IDFT(const std::vector<float>& real, const std::vector<float>& imag)
+std::vector<float> snd::IDFT(const std::vector<std::complex<float>>& arg)
 {
-	size_t size = real.size();
+	size_t size = arg.size();
 	std::vector<float>data(size, 0.0f);
 
 	for (size_t i = 0; i < size; ++i)
 	{
 		for (size_t n = 0; n < size; ++n)
 		{
-			data[i] += real[n] * std::cos(2.0f * snd::PI() * i * n / size)
-				     - imag[n] * std::sin(2.0f * snd::PI() * i * n / size);
+			data[i] += arg[n].real() * std::cos(2.0f * snd::PI() * i * n / size)
+				     - arg[n].imag() * std::sin(2.0f * snd::PI() * i * n / size);
+		}
+
+		data[i] /= size;
+	}
+
+	return data;
+}
+
+// 逆離散フーリエ変換
+std::vector<double> snd::IDFT(const std::vector<std::complex<double>>& arg)
+{
+	size_t size = arg.size();
+	std::vector<double>data(size, 0.0f);
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		for (size_t n = 0; n < size; ++n)
+		{
+			data[i] += arg[n].real() * std::cos(2.0 * double(snd::PI()) * i * n / size)
+				     - arg[n].imag() * std::sin(2.0 * double(snd::PI()) * i * n / size);
 		}
 
 		data[i] /= size;
