@@ -50,7 +50,12 @@ void Filter::InitFunc(void)
 	func1[snd::FilterType::LowPass]  = std::bind(&Filter::LowPass,  this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
 	func1[snd::FilterType::HighPass] = std::bind(&Filter::HighPass, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
 	func1[snd::FilterType::BandPass] = std::bind(&Filter::BandPass, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+	func1[snd::FilterType::AllPass]  = std::bind(&Filter::AllPass,  this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
 	func1[snd::FilterType::Notch]    = std::bind(&Filter::Notch,    this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+
+	func2[snd::FilterType::LowShelf]  = std::bind(&Filter::LowShelf,  this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);
+	func2[snd::FilterType::HighShelf] = std::bind(&Filter::HighShelf, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);
+	func2[snd::FilterType::Peaking]   = std::bind(&Filter::Peaking,   this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);
 }
 
 // ローパスフィルタ
@@ -137,6 +142,34 @@ bool Filter::BandPass(const float& cutoff, const float& bw, const unsigned short
 	return true;
 }
 
+// オールパスフィルタ
+bool Filter::AllPass(const float& cutoff, const float& q, const unsigned int& sample)
+{
+	if (cutoff < CUT_MIN
+		|| cutoff > snd::Floor(float(sample / 2), 3))
+	{
+		return false;
+	}
+
+	if (q <= 0.0f)
+	{
+		return false;
+	}
+
+	float omega = 2.0f * snd::PI() * cutoff / sample;
+	float alpha = std::sin(omega) / 2.0f * q;
+
+	a[0] =  1.0f + alpha;
+	a[1] = -2.0f * cos(omega);
+	a[2] =  1.0f - alpha;
+
+	b[0] =  1.0f - alpha;
+	b[1] = -2.0f * cos(omega);
+	b[2] =  1.0f + alpha;
+
+	return true;
+}
+
 // ノッチフィルタ
 bool Filter::Notch(const float& cutoff, const float& bw, const unsigned short& sample)
 {
@@ -191,6 +224,65 @@ bool Filter::LowShelf(const float& cutoff, const float& q, const float& gain, co
 	b[0] = A * ((A + 1.0f) - (A - 1.0f) * std::cos(omega) + beta * std::sin(omega));
 	b[1] = 2.0f * A * ((A - 1.0f) - (A + 1.0f) * std::cos(omega));
 	b[2] = A * ((A + 1.0f) - (A - 1.0f) * std::cos(omega) - beta * std::sin(omega));
+
+	return true;
+}
+
+// ハイシェルフフィルタ
+bool Filter::HighShelf(const float& cutoff, const float& q, const float& gain, const unsigned int& sample)
+{
+	if (cutoff < CUT_MIN
+		|| cutoff > snd::Floor(float(sample / 2), 3))
+	{
+		return false;
+	}
+
+	if (q <= 0.0f)
+	{
+		return false;
+	}
+
+	float omega = 2.0f * snd::PI() * cutoff / sample;
+	float alpha = std::sin(omega) / 2.0f * q;
+	float A     = std::pow(10.0f, gain / 4.0f);
+	float beta  = std::sqrt(A) / q;
+
+	a[0] = (A + 1.0f) - (A - 1.0f) * cos(omega) + beta * sin(omega);
+	a[1] =  2.0f * ((A - 1.0f) - (A + 1.0f) * cos(omega));
+	a[2] = (A + 1.0f) - (A - 1.0f) * cos(omega) - beta * sin(omega);
+
+	b[0] =  A * ((A + 1.0f) + (A - 1.0f) * cos(omega) + beta * sin(omega));
+	b[1] = -2.0f * A * ((A - 1.0f) + (A + 1.0f) * cos(omega));
+	b[2] =  A * ((A + 1.0f) + (A - 1.0f) * cos(omega) - beta * sin(omega));
+
+	return true;
+}
+
+// ピーキングフィルタ
+bool Filter::Peaking(const float& cutoff, const float& bw, const float& gain, const unsigned int& sample)
+{
+	if (cutoff < CUT_MIN
+		|| cutoff > snd::Floor(float(sample / 2), 3))
+	{
+		return false;
+	}
+
+	if (bw <= 0.0f)
+	{
+		return false;
+	}
+
+	float omega = 2.0f * snd::PI() * cutoff / sample;
+	float alpha = std::sin(omega) * std::sinh(std::log(2.0f) / 2.0f * bw * omega / std::sin(omega));
+	float A     = std::pow(10.0f, gain / 40.0f);
+
+	a[0] =  1.0f + alpha / A;
+	a[1] = -2.0f * cos(omega);
+	a[2] =  1.0f - alpha / A;
+
+	b[0] =  1.0f + alpha * A;
+	b[1] = -2.0f * cos(omega);
+	b[2] =  1.0f - alpha * A;
 
 	return true;
 }

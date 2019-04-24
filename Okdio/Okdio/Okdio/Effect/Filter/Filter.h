@@ -11,8 +11,11 @@ namespace snd
 		LowPass,
 		HighPass,
 		BandPass,
+		AllPass,
 		Notch,
-		//LowShelf,
+		LowShelf,
+		HighShelf,
+		Peaking
 	};
 }
 
@@ -31,34 +34,54 @@ public:
 
 	// ローパスフィルタ
 	// cutoff　最小値：10.0f、最大値：sampleの半分未満（10の位から切り捨てを行っています）
-	// q　0.0fより大きい数値に設定してください
+	// q　     0.0fより大きい数値に設定してください
 	// sample　適応させる波形のサンプリング周波数
 	bool LowPass(const float& cutoff, const float& q, const unsigned short& sample = 44100);
 
 	// ハイパスフィルタ
 	// cutoff　最小値：10.0f、最大値：sampleの半分未満（10の位から切り捨てを行っています）
-	// q　0.0fより大きい数値に設定してください
+	// q　     0.0fより大きい数値に設定してください
 	// sample　適応させる波形のサンプリング周波数
 	bool HighPass(const float& cutoff, const float& q, const unsigned short& sample = 44100);
 
 	// バンドパスフィルタ
 	// cutoff　最小値：10.0f、最大値：sampleの半分未満（10の位から切り捨てを行っています）
-	// bw　0.0fより大きい数値に設定してください
+	// bw　    0.0fより大きい数値に設定してください
 	// sample　適応させる波形のサンプリング周波数
 	bool BandPass(const float& cutoff, const float& bw, const unsigned short& sample = 44100);
 
+	// オールパスフィルタ
+	// cutoff　最小値：10.0f、最大値：sampleの半分未満（10の位から切り捨てを行っています）
+	// q　     0.0fより大きい数値に設定してください
+	// sample　適応させる波形のサンプリング周波数
+	bool AllPass(const float& cutoff, const float& q, const unsigned int& sample = 44100);
+
 	// ノッチフィルタ
 	// cutoff　最小値：10.0f、最大値：sampleの半分未満（10の位から切り捨てを行っています）
-	// bw　0.0fより大きい数値に設定してください
+	// bw　    0.0fより大きい数値に設定してください
 	// sample　適応させる波形のサンプリング周波数	
 	bool Notch(const float& cutoff, const float& bw, const unsigned short& sample = 44100);
 
 	// ローシェルフフィルタ
 	// cutoff　最小値：10.0f、最大値：sampleの半分未満（10の位から切り捨てを行っています）
-	// q　0.0fより大きい数値に設定してください
-	// gain　特になし
+	// q　     0.0fより大きい数値に設定してください
+	// gain　  特になし
 	// sample　適応させる波形のサンプリング周波数
 	bool LowShelf(const float& cutoff, const float& q, const float& gain, const unsigned short& sample = 44100);
+
+	// ハイシェルフフィルタ
+	// cutoff　最小値：10.0f、最大値：sampleの半分未満（10の位から切り捨てを行っています）
+	// q　     0.0fより大きい数値に設定してください
+	// gain　  特になし
+	// sample　適応させる波形のサンプリング周波数
+	bool HighShelf(const float& cutoff, const float& q, const float& gain, const unsigned int& sample = 44100);
+
+	// ピーキングフィルタ
+	// cutoff　最小値：10.0f、最大値：sampleの半分未満（10の位から切り捨てを行っています）
+	// bw　    0.0fより大きい数値に設定してください
+	// gain　  特になし
+	// sample　適応させる波形のサンプリング周波数
+	bool Peaking(const float& cutoff, const float& bw, const float& gain, const unsigned int& sample = 44100);
 
 	// 代入演算子オーバーロード
 	void operator=(const Filter& filter);
@@ -82,4 +105,5 @@ private:
 
 	// 関数ポインタ
 	std::unordered_map<snd::FilterType, std::function<bool(const float&, const float&, const unsigned short&)>>func1;
+	std::unordered_map<snd::FilterType, std::function<bool(const float&, const float&, const float&, const unsigned short&)>>func2;
 };

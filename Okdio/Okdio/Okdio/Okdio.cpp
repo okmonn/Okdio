@@ -62,6 +62,8 @@ Okdio::~Okdio()
 		WaitForSingleObject(handle, INFINITE);
 	}
 
+	Stop();
+
 	if (voice != nullptr)
 	{
 		voice->DestroyVoice();
@@ -201,104 +203,6 @@ long Okdio::Stop(void)
 	return hr;
 }
 
-// 高速フーリエ変換
-void FFT(void)
-{
-	//n　 入力信号配列サイズ
-	//id　IDの並び
-	auto calc = [&](const unsigned int& n, std::vector<unsigned int>& id)->unsigned int {
-		//2の累乗の基数
-		unsigned int stage = unsigned int(std::ceil(std::log2(n)));
-
-		//配列メモリ確保
-		id.reserve(n);
-
-		id.push_back(0);
-		id.push_back(1);
-		for (unsigned int st = 0; st < stage - 1; ++st)
-		{
-			for (unsigned int& i : id)
-			{
-				i *= 2;
-			}
-
-			//追加
-			id.insert(id.end(), id.begin(), id.end());
-
-			//イテレータを配列サイズ分進める
-			auto itr = id.begin();
-			std::advance(itr, id.size() / 2);
-
-			for (; itr != id.end(); ++itr)
-			{
-				(*itr) += 1;
-			}
-		}
-
-		return stage;
-	};
-
-	//data　 入力データ
-	//arg　　出力の実部、虚部
-	auto fft = [&](const std::vector<std::complex<double>>& data, std::vector<std::complex<double>>& arg, const bool& inverse = false)->void {
-		std::vector<unsigned int>id;
-		unsigned int stage = calc(data.size(), id);
-
-		arg.assign(data.size(), 0.0);
-		for (unsigned int i = 0; i < data.size(); ++i)
-		{
-			arg[i] = data[id[i]];
-		}
-
-		unsigned int po2 = 1;
-
-		for (unsigned int st = 1; st <= stage; ++st)
-		{
-			po2 <<= 1;
-			const int po2m = po2 >> 1;
-
-			auto w = std::exp(std::complex<double>(0.0, 2.0 * double(snd::PI()) / po2));
-			w = (inverse == true) ? std::conj(w) : w;
-
-			auto ws = std::complex<double>(1.0, 0.0);
-
-			//バタフライ
-			for (unsigned int i = 0; i < po2m; ++i)
-			{
-				for (unsigned int n = 0; n < data.size(); n += po2)
-				{
-					auto wfb = ws * arg[n + i + po2m];
-					arg[n + i + po2m] = arg[n + i] - wfb;
-					arg[n + i] += wfb;
-				}
-
-				ws *= w;
-			}
-		}
-	};
-
-	auto ifft = [&](const std::vector<std::complex<double>> & arg, std::vector<std::complex<double>> & data)->void {
-		fft(arg, data, true);
-
-		std::for_each(data.begin(), data.end(), [&](std::complex<double>& val)->void {
-			val /= data.size();
-		});
-	};
-
-	std::vector<std::complex<double>>data = {
-		0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0
-	};
-	std::vector<std::complex<double>>arg;
-	fft(data, arg);
-
-	std::vector<std::complex<double>>tmp;
-	ifft(arg, tmp);
-
-	std::vector<std::complex<int>>tmp2(tmp.begin(), tmp.end());
-
-	int qqq = 0;
-}
-
 // 波形データをボイスバッファに追加
 long Okdio::Submit(void)
 {
@@ -306,8 +210,6 @@ long Okdio::Submit(void)
 	{
 		WaitForSingleObject(handle, INFINITE);
 	}
-
-	FFT();
 
 	XAUDIO2_BUFFER buf{};
 	buf.AudioBytes = unsigned int(sizeof(float) * data[index].size());
