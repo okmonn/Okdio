@@ -203,6 +203,30 @@ long Okdio::Stop(void)
 	return hr;
 }
 
+// タイムストレッチ
+std::vector<float> Test(std::vector<float>& data, const float& speed)
+{
+	// 適応データ
+	std::vector<float>adap(data.size() / speed);
+
+	//元配列用インデックス
+	float index1 = 0.0f;
+	//適応配列用インデックス
+	float index2 = 0.0f;
+
+	unsigned int index = 0;
+	for (unsigned int i = 0; i < data.size(); i += 2)
+	{
+		if (index >= adap.size())
+		{
+			break;
+		}
+		adap[index++] = data[i];
+	}
+
+	return adap;
+}
+
 // 波形データをボイスバッファに追加
 long Okdio::Submit(void)
 {
@@ -210,6 +234,8 @@ long Okdio::Submit(void)
 	{
 		WaitForSingleObject(handle, INFINITE);
 	}
+
+	data[index] = Test(data[index], 1.5f);
 
 	XAUDIO2_BUFFER buf{};
 	buf.AudioBytes = unsigned int(sizeof(float) * data[index].size());
