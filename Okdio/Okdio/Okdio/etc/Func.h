@@ -14,6 +14,9 @@ namespace snd
 	// ‰~ü—¦æ“¾
 	inline constexpr float PI(void);
 
+	// BPM‰ğÍ
+	void BPM(const std::string& fileName);
+
 	// —£Uƒt[ƒŠƒG•ÏŠ·
 	std::vector<std::complex<float>> DFT(const std::vector<float>& data);
 	std::vector<std::complex<double>> DFT(const std::vector<double>& data);

@@ -24,6 +24,48 @@ constexpr float snd::PI(void)
 	return 3.14159265358979323846f;
 }
 
+// BPM解析
+void snd::BPM(const std::string& fileName)
+{
+	//フレーム分割
+	const unsigned int size = 512;
+	unsigned int N = unsigned int(std::ceil(Loader::Get().Data(fileName).lock()->size() / size));
+	std::vector<std::vector<float>>fream(N);
+	for (unsigned int n = 0; n < N; ++n)
+	{
+		for (unsigned int i = 0; i < size; ++i)
+		{
+			if (size * n + i >= Loader::Get().Data(fileName).lock()->size())
+			{
+				break;
+			}
+			fream[n].push_back(Loader::Get().Data(fileName).lock()->at(size * n + i));
+		}
+	}
+
+	//フレームごとの音量を求める
+	std::vector<float>freamVol(N);
+	for (unsigned int n = 0; n < N; ++n)
+	{
+		for (unsigned int i = 0; i < fream[n].size(); ++i)
+		{
+			freamVol[n] += std::pow(fream[n][i], 2);
+		}
+
+		freamVol[n] = std::sqrt(freamVol[n] / fream[n].size());
+	}
+
+	//隣り合うフレームの音量増加量を求める
+	std::vector<float>freamInc(N);
+	for (unsigned int n = 1; n < N; ++n)
+	{
+		float tmp = freamVol[n] - freamVol[n - 1];
+		freamInc[n] = (tmp > 0.0f) ? tmp : 0.0f;
+	}
+
+	int qqq = 0;
+}
+
 // 離散フーリエ変換
 std::vector<std::complex<float>> snd::DFT(const std::vector<float>& data)
 {
