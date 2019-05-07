@@ -14,8 +14,9 @@ namespace snd
 	// 円周率取得
 	inline constexpr float PI(void);
 
-	// BPM解析
-	void BPM(const std::string& fileName);
+	// ハニング窓
+	template <typename T>
+	T Haninng(unsigned int& i, size_t& num);
 
 	// 離散フーリエ変換
 	std::vector<std::complex<float>> DFT(const std::vector<float>& data);

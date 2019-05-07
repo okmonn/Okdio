@@ -13,7 +13,6 @@ int main()
 	Volume vol(1.0f);
 	//エフェクトの追加
 	s.PushEffect(&vol);
-	snd::BPM(s.GetName());
 	//再生
 	s.Play();
 

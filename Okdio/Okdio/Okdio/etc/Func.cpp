@@ -24,47 +24,16 @@ constexpr float snd::PI(void)
 	return 3.14159265358979323846f;
 }
 
-// BPM解析
-void snd::BPM(const std::string& fileName)
+// ハニング窓
+template <typename T>
+T snd::Haninng(unsigned int& i, size_t& num)
 {
-	//フレーム分割
-	const unsigned int size = 512;
-	unsigned int N = unsigned int(std::ceil(Loader::Get().Data(fileName).lock()->size() / size));
-	std::vector<std::vector<float>>fream(N);
-	for (unsigned int n = 0; n < N; ++n)
-	{
-		for (unsigned int i = 0; i < size; ++i)
-		{
-			if (size * n + i >= Loader::Get().Data(fileName).lock()->size())
-			{
-				break;
-			}
-			fream[n].push_back(Loader::Get().Data(fileName).lock()->at(size * n + i));
-		}
-	}
-
-	//フレームごとの音量を求める
-	std::vector<float>freamVol(N);
-	for (unsigned int n = 0; n < N; ++n)
-	{
-		for (unsigned int i = 0; i < fream[n].size(); ++i)
-		{
-			freamVol[n] += std::pow(fream[n][i], 2);
-		}
-
-		freamVol[n] = std::sqrt(freamVol[n] / fream[n].size());
-	}
-
-	//隣り合うフレームの音量増加量を求める
-	std::vector<float>freamInc(N);
-	for (unsigned int n = 1; n < N; ++n)
-	{
-		float tmp = freamVol[n] - freamVol[n - 1];
-		freamInc[n] = (tmp > 0.0f) ? tmp : 0.0f;
-	}
-
-	int qqq = 0;
+	return (num % 2 == 0)
+		? T(0.5 - 0.5 * std::cos(2.0 * snd::PI() * i / num))
+		: T(0.5 - 0.5 * std::cos(2.0 * snd::PI() * (i + 0.5) / num));
 }
+template float snd::Haninng<float>(unsigned int&, size_t&);
+template double snd::Haninng<double>(unsigned int&, size_t&);
 
 // 離散フーリエ変換
 std::vector<std::complex<float>> snd::DFT(const std::vector<float>& data)
@@ -140,8 +109,8 @@ std::vector<double> snd::IDFT(const std::vector<std::complex<double>>& arg)
 	{
 		for (size_t n = 0; n < size; ++n)
 		{
-			data[i] += arg[n].real() * std::cos(2.0 * double(snd::PI()) * i * n / size)
-				     - arg[n].imag() * std::sin(2.0 * double(snd::PI()) * i * n / size);
+			data[i] += arg[n].real() * std::cos(2.0 * snd::PI() * i * n / size)
+				     - arg[n].imag() * std::sin(2.0 * snd::PI() * i * n / size);
 		}
 
 		data[i] /= size;
@@ -239,7 +208,7 @@ std::vector<std::complex<double>> snd::FFT(const std::vector<double>& data)
 
 				std::complex<double>tmp1 = tmp[index1];
 				std::complex<double>tmp2 = tmp[index2];
-				std::complex<double>tmp3 = { std::cos(2 * double(snd::PI()) * p / num), -std::sin(2 * double(snd::PI()) * p / num) };
+				std::complex<double>tmp3 = { std::cos(2 * snd::PI() * p / num), -std::sin(2 * snd::PI() * p / num) };
 
 				tmp[index1] = tmp1 + tmp2;
 				if (st < stage)
@@ -362,7 +331,7 @@ std::vector<double> snd::IFFT(const std::vector<std::complex<double>>& data, con
 
 				std::complex<double>tmp1 = tmp[index1];
 				std::complex<double>tmp2 = tmp[index2];
-				std::complex<double>tmp3 = { std::cos(2 * double(snd::PI()) * p / data.size()), std::sin(2 * double(snd::PI()) * p / data.size()) };
+				std::complex<double>tmp3 = { std::cos(2 * snd::PI() * p / data.size()), std::sin(2 * snd::PI() * p / data.size()) };
 
 				tmp[index1] = tmp1 + tmp2;
 				if (st < stage)
