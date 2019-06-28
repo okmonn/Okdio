@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="etc">
+      <UniqueIdentifier>{65713077-453b-4bc1-92ef-39bee99f8240}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Okdio">
+      <UniqueIdentifier>{83b7cbb2-b784-424d-8696-6fcbf301137f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XAudio2">
+      <UniqueIdentifier>{6fe8ca27-b3f2-4d7d-964c-8d24e7821ce2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Loader">
+      <UniqueIdentifier>{85a7838d-be09-4542-9028-a5e1b39422f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Callback">
+      <UniqueIdentifier>{cca61a27-c4f9-4d83-b239-9be9ab9516ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Func">
+      <UniqueIdentifier>{67e3dd88-49a3-442d-8b80-a1d13156ecc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Filter">
+      <UniqueIdentifier>{6d6d250a-b2e6-453a-91c2-f19629a0e0b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Voice">
+      <UniqueIdentifier>{37a6785a-613c-456c-9bbe-75c062461e1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MixVocie">
+      <UniqueIdentifier>{6b0d6d89-b5a3-464e-a0f7-6f43268d9651}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Effect">
+      <UniqueIdentifier>{815be16b-c106-453b-91b5-d0d32c47b898}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Effect\Distortion">
+      <UniqueIdentifier>{85922ab6-704c-4992-9707-b1c9d7bb2759}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Microphone">
+      <UniqueIdentifier>{1f62eae8-606c-4e8d-b548-6cd1168fbfcf}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Okdio\XAudio2\XAudio2.cpp">
+      <Filter>XAudio2</Filter>
+    </ClCompile>
+    <ClCompile Include="Okdio\Okdio.cpp">
+      <Filter>Okdio</Filter>
+    </ClCompile>
+    <ClCompile Include="Okdio\Loader\Loader.cpp">
+      <Filter>Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="Okdio\Callback\VoiceCallback.cpp">
+      <Filter>Callback</Filter>
+    </ClCompile>
+    <ClCompile Include="Okdio\Func\Func.cpp">
+      <Filter>Func</Filter>
+    </ClCompile>
+    <ClCompile Include="Okdio\Filter\Filter.cpp">
+      <Filter>Filter</Filter>
+    </ClCompile>
+    <ClCompile Include="Okdio\Voice\Voice.cpp">
+      <Filter>Voice</Filter>
+    </ClCompile>
+    <ClCompile Include="Okdio\MixVoice\MixVoice.cpp">
+      <Filter>MixVocie</Filter>
+    </ClCompile>
+    <ClCompile Include="Okdio\Effect\Distortion\Distortion.cpp">
+      <Filter>Effect\Distortion</Filter>
+    </ClCompile>
+    <ClCompile Include="Okdio\Microphone\Microphone.cpp">
+      <Filter>Microphone</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Okdio\etc\Cuda.h">
+      <Filter>etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\Okdio.h">
+      <Filter>Okdio</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\XAudio2\XAudio2.h">
+      <Filter>XAudio2</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\etc\WavFmt.h">
+      <Filter>etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\etc\Info.h">
+      <Filter>etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\Loader\Loader.h">
+      <Filter>Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\Callback\VoiceCallback.h">
+      <Filter>Callback</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\Func\Func.h">
+      <Filter>Func</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\Filter\Filter.h">
+      <Filter>Filter</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\Voice\Voice.h">
+      <Filter>Voice</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\MixVoice\MixVoice.h">
+      <Filter>MixVocie</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\Effect\Effect.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\etc\SoundEffects.h">
+      <Filter>etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\Effect\Distortion\Distortion.h">
+      <Filter>Effect\Distortion</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\etc\Singleton.h">
+      <Filter>etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\Microphone\Microphone.h">
+      <Filter>Microphone</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\etc\Fix.h">
+      <Filter>etc</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
