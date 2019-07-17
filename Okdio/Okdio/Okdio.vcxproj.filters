@@ -22,14 +22,14 @@
     <Filter Include="etc">
       <UniqueIdentifier>{04b7d956-7b2e-4394-b091-1b607ce5bcf1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Manager">
-      <UniqueIdentifier>{6b28c9ea-546b-47f9-bc2a-edf64ab52317}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Okdio">
       <UniqueIdentifier>{dbbe6772-ce07-4a36-997f-d2fdc9984724}</UniqueIdentifier>
     </Filter>
     <Filter Include="Loader">
       <UniqueIdentifier>{e9f4d1dc-6dac-4d29-98cc-e89da1403efb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager">
+      <UniqueIdentifier>{ccc83195-d501-423e-8d15-8b3ffeafc475}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -45,11 +45,11 @@
     <ClCompile Include="Okdio\Loader\Loader.cpp">
       <Filter>Loader</Filter>
     </ClCompile>
-    <ClCompile Include="Okdio\Manager\Manager.cpp">
-      <Filter>Manager</Filter>
-    </ClCompile>
     <ClCompile Include="Okdio\Okdio.cpp">
       <Filter>Okdio</Filter>
+    </ClCompile>
+    <ClCompile Include="Okdio\Manager\Manager.cpp">
+      <Filter>Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -74,9 +74,6 @@
     <ClInclude Include="Okdio\XAudio2\VoiceCallback.h">
       <Filter>XAudio2</Filter>
     </ClInclude>
-    <ClInclude Include="Okdio\Manager\Manager.h">
-      <Filter>Manager</Filter>
-    </ClInclude>
     <ClInclude Include="Okdio\etc\Unknown.h">
       <Filter>etc</Filter>
     </ClInclude>
@@ -85,6 +82,9 @@
     </ClInclude>
     <ClInclude Include="Okdio\Okdio.h">
       <Filter>Okdio</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\Manager\Manager.h">
+      <Filter>Manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

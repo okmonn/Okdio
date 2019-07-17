@@ -1,6 +1,7 @@
 #include "Func.h"
 #include "../XAudio2/XAudio2.h"
 #include "../Manager/Manager.h"
+#include "../Loader/Loader.h"
 #include <windows.h>
 
 // デバッグ出力
@@ -16,19 +17,24 @@ void okmonn::DebugStream(const std::string& str)
 // エンジン開始
 bool okmonn::EnginStart(void)
 {
-	Manager::Get().Malloc();
 	return XAudio2::Get().EnginStart();
-}
-
-// オブジェクト生成
-long okmonn::CreateObj(const GUID& id, void** obj)
-{
-	return Manager::Get().Create(id, obj);
 }
 
 // エンジン終了
 void okmonn::EnginEnd(void)
 {
-	Manager::Get().Release();
 	XAudio2::Get().EnginEnd();
 }
+
+// オブジェクト生成
+long okmonn::CreateObj(const GUID& id, void** obj)
+{
+	return Manager::Get().CreateObj(id, obj);
+}
+
+// 波形データ削除
+void okmonn::Delete(const std::string& fileName)
+{
+	Loader::Get().Delete(fileName);
+}
+

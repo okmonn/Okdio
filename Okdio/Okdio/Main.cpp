@@ -4,38 +4,42 @@
 
 int main()
 {
-	auto hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+	auto hr = CoInitializeEx(nullptr, COINITBASE_MULTITHREADED);
+	_ASSERT(hr == S_OK);
 
 	okmonn::EnginStart();
-	std::vector<Okdio*>okdio(2, nullptr);
-	for (auto& i : okdio)
+
+	Okdio* okdio = nullptr;
+	hr = okmonn::CreateObj(IID_PPV_ARGS(&okdio));
+	if (FAILED(hr))
 	{
-		okmonn::CreateObj(IID_PPV_ARGS(&i));
+		return 0;
 	}
-	okdio[0]->Load("INSIDE.wav");
-	okdio[0]->Play(true);
-	okdio[1]->Load("Demo1.wav");
-	okdio[1]->Play(true);
-	
+
+	okdio->Load("INSIDE.wav");
+	okdio->Play(true);
+
+	float volume = 1.0f;
+	const float tmp = 0.00001f;
 	while (!(GetKeyState(VK_ESCAPE) & 0x80))
 	{
-		if (GetKeyState(VK_RETURN) & 0x80)
+		if (GetKeyState(VK_UP) & 0x80)
 		{
-			if (okdio[0] != nullptr)
+			if (okdio->SetVolume(volume + tmp))
 			{
-				okdio[0]->Release();
-				okdio[0] = nullptr;
+				volume += tmp;
+			}
+		}
+		else if (GetKeyState(VK_DOWN) & 0x80)
+		{
+			if (okdio->SetVolume(volume - tmp))
+			{
+				volume -= tmp;
 			}
 		}
 	}
 
-	for (auto& i : okdio)
-	{
-		if (i != nullptr)
-		{
-			i->Release();
-		}
-	}
+	okdio->Release();
 	okmonn::EnginEnd();
 	CoUninitialize();
 	return 0;

@@ -13,9 +13,12 @@ namespace okmonn
 	// エンジン開始
 	bool EnginStart(void);
 
+	// エンジン終了
+	void EnginEnd(void);
+
 	// オブジェクト生成
 	long CreateObj(const GUID& id, void** obj);
 
-	// エンジン終了
-	void EnginEnd(void);
+	// 波形データ削除
+	void Delete(const std::string& fileName);
 }

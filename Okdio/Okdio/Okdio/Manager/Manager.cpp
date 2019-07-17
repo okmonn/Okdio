@@ -2,38 +2,29 @@
 #include "../Okdio.h"
 
 // コンストラクタ
-Manager::Manager() : 
-	okdio(nullptr)
+Manager::Manager()
 {
 }
 
 // デストラクタ
 Manager::~Manager()
 {
-	Release();
-}
-
-// メモリ確保
-void Manager::Malloc(void)
-{
-	if (okdio == nullptr)
-	{
-		okdio = new Okdio();
-	}
 }
 
 // オブジェクト生成
-long Manager::Create(const GUID& id, void** obj)
+long Manager::CreateObj(const GUID& id, void** obj)
 {
-	return okdio->QueryInterface(id, obj);
-}
-
-// 解放処理
-void Manager::Release(void)
-{
-	if (okdio != nullptr)
+	if (obj == nullptr)
 	{
-		okdio->Release();
-		okdio = nullptr;
+		return E_INVALIDARG;
 	}
+
+	*obj = nullptr;
+	if (id == __uuidof(Okdio))
+	{
+		*obj = new Okdio();
+		return S_OK;
+	}
+
+	return E_NOINTERFACE;
 }
