@@ -116,7 +116,7 @@ void Okdio::Submit(void)
 	}
 
 	auto wave = Loader::Get().Wave(name);
-	size_t size = read + Loader::Get().ProcessSize(name) >= wave.lock()->size()
+	size_t size = read + Loader::Get().ProcessSize(name) > wave.lock()->size()
 		? (read + Loader::Get().ProcessSize(name)) - wave.lock()->size() : Loader::Get().ProcessSize(name);
 
 	XAUDIO2_BUFFER buf{};
@@ -137,7 +137,7 @@ void Okdio::CheckEnd(void)
 {
 	if (read >= Loader::Get().Wave(name).lock()->size())
 	{
-		if (loop != true)
+		if (loop == false)
 		{
 			Stop();
 			end = true;
