@@ -9,6 +9,7 @@ class Manager;
 class __declspec(uuid("C1FFFB4C-EC30-49DF-84ED-FD90BC1FC2AA"))
 Okdio : public Voice<Okdio, IXAudio2SourceVoice>
 {
+	friend Voice<Okdio, IXAudio2SourceVoice>;
 	friend VoiceCallback;
 	friend Manager;
 public:

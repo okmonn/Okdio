@@ -31,6 +31,7 @@ Okdio::~Okdio()
 {
 	if (voice != nullptr)
 	{
+		Stop();
 		voice->DestroyVoice();
 		voice = nullptr;
 	}

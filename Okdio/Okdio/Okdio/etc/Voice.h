@@ -7,6 +7,14 @@ class Voice :
 	public IUnknown
 {
 public:
+	// 音量調節
+	bool SetVolume(const float& rate)
+	{
+
+	}
+
+	// チャンネルごとの
+
 	// 参照カウント加算
 	unsigned long __stdcall AddRef(void) {
 		return InterlockedIncrement(&ref);
@@ -33,7 +41,7 @@ public:
 		*obj = nullptr;
 		if (id == IID_IUnknown || id == __uuidof(CLASS))
 		{
-			*obj = (void*)this;
+			*obj = (void*)new CLASS();
 			AddRef();
 			return S_OK;
 		}
