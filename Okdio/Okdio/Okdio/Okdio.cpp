@@ -120,7 +120,7 @@ void Okdio::Submit(void)
 		? (read + Loader::Get().ProcessSize(name)) - wave.lock()->size() : Loader::Get().ProcessSize(name);
 
 	XAUDIO2_BUFFER buf{};
-	buf.AudioBytes = sizeof(wave.lock()->at(0)) * size;
+	buf.AudioBytes = unsigned __int32(sizeof(wave.lock()->at(0)) * size);
 	buf.pAudioData = (unsigned char*)&wave.lock()->at(read);
 	auto hr = voice->SubmitSourceBuffer(&buf);
 	if (FAILED(hr))
