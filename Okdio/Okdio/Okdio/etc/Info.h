@@ -1,6 +1,6 @@
 #pragma once
 
-namespace snd
+namespace okmonn
 {
 	// サウンド情報
 	struct Info
@@ -12,18 +12,16 @@ namespace snd
 		//チャンネル数
 		unsigned char channel;
 
-		//コンストラクタ
 		Info() : sample(0), bit(0), channel(0) {}
-		Info(const unsigned short& s, const unsigned char& b, const unsigned char& c)
-			: sample(s), bit(b), channel(c) {}
-	};
-
-	// フィルタタイプ
-	enum class FilterType
-	{
-		LowPass,
-		HighPass,
-		BandPass,
-		Notch
+		Info(const Info& info) {
+			(*this) = info;
+		}
+		Info(const unsigned short& s, const unsigned char& b, const unsigned char& c) :
+			sample(s), bit(b), channel(c) {}
+		void operator=(const Info& info) {
+			sample  = info.sample;
+			bit     = info.bit;
+			channel = info.channel;
+		}
 	};
 }

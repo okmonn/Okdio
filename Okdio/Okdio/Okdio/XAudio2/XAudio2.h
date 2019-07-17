@@ -9,11 +9,14 @@ class XAudio2 :
 {
 	friend Singleton<XAudio2>;
 public:
+	// 開始
+	bool EnginStart(void);
+
+	// 終了
+	void EnginEnd(void);
+
 	// オーディオ取得
 	IXAudio2* Audio(void) const;
-
-	// マスタリングボイス取得
-	IXAudio2MasteringVoice* Mastering(void) const;
 
 private:
 	// コンストラクタ
@@ -21,14 +24,12 @@ private:
 	// デストラクタ
 	~XAudio2();
 
-	// COM初期化
-	void InitCom(void);
 
 	// オーディオ生成
-	void CreateAudio(void);
+	long CreateAudio(void);
 
-	// マスタリングボイスの生成
-	void CreateMastering(void);
+	// マスタリングボイス生成
+	long CreateMastering(void);
 
 
 	// オーディオ

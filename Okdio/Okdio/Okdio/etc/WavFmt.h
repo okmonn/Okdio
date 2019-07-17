@@ -37,7 +37,7 @@ namespace wav
 	};
 
 	// ì«Ç›çûÇ›
-	int Load(const std::string& fileName, snd::Info& info, std::shared_ptr<std::vector<float>>& outData)
+	int Load(const std::string& fileName, okmonn::Info& info, std::shared_ptr<std::vector<unsigned char>>& outData)
 	{
 		FILE* file = nullptr;
 		if (fopen_s(&file, fileName.c_str(), "rb") != 0)
@@ -88,8 +88,14 @@ namespace wav
 		unsigned long size = 0;
 		fread_s(&size, sizeof(size), sizeof(size), 1, file);
 
-		info    = snd::Info(unsigned short(fmt.sample), unsigned char(fmt.bit), unsigned char(fmt.channel));
-		outData = std::make_shared<std::vector<float>>(size / (fmt.bit / 8));
+		info    = okmonn::Info(unsigned short(fmt.sample), unsigned char(fmt.bit), unsigned char(fmt.channel));
+		outData = std::make_shared<std::vector<unsigned char>>(size);
+
+		fread_s(outData->data(), size, size, 1, file);
+
+
+
+		/*outData = std::make_shared<std::vector<float>>(size / (fmt.bit / 8));
 
 		switch (fmt.bit)
 		{
@@ -119,7 +125,7 @@ namespace wav
 		}
 		default:
 			break;
-		}
+		}*/
 
 		fclose(file);
 

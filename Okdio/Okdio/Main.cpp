@@ -1,40 +1,23 @@
 #include "Okdio/Okdio.h"
-#include <iostream>
 #include <Windows.h>
 
-bool now = false;
-bool old = false;
-
-bool IsKey(const unsigned char& key)
-{
-	old = now;
-	now = GetKeyState(key) & 0x80;
-	return now;
-}
-bool IsTrigger(const unsigned char& key)
-{
-	return IsKey(key) && old != now;
-}
-
-#include "Okdio/etc/Fix.h"
 int main()
 {
-	Fix a(0.035191f);
-	Fix b(0.5f);
-	//a += b;
-	printf("%f\n", a.Float());
+	auto hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 
+	okmonn::EnginStart();
 
-	Okdio okdio;
-	auto& mic = Microphone::Get();
-	mic.SetAudio(&okdio);
-	mic.Start();
-	//okdio.SetFilter(snd::FilterType::LowPass, 100.0f);
-	okdio.Play(true);
-
-	while (IsKey(VK_ESCAPE) == false)
+	Okdio* okdio = nullptr;
+	okmonn::CreateObj(IID_PPV_ARGS(&okdio));
+	okdio->Load("INSIDE.wav");
+	okdio->Play(false);
+	while (!(GetKeyState(VK_ESCAPE) & 0x80))
 	{
+
 	}
 
+	okdio->Release();
+	okmonn::EnginEnd();
+	CoUninitialize();
 	return 0;
 }

@@ -4,7 +4,7 @@ template <typename T>
 class Singleton
 {
 public:
-	// インスタンス変数の取得
+	// インスタンス変数取得
 	static T& Get(void)
 	{
 		static T instance;
@@ -14,12 +14,10 @@ public:
 protected:
 	// コンストラクタ
 	Singleton() {}
-
 	// デストラクタ
 	virtual ~Singleton() {}
 
 private:
 	Singleton(const Singleton&) = delete;
 	void operator=(const Singleton&) = delete;
-
 };

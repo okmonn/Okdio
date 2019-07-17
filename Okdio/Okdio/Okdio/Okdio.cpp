@@ -1,11 +1,13 @@
 #include "Okdio.h"
 #include "XAudio2/XAudio2.h"
-#include "Callback/VoiceCallback.h"
 #include "Loader/Loader.h"
+#include "XAudio2/VoiceCallback.h"
 #include <ks.h>
 #include <ksmedia.h>
 
-// スピーカー設定用配列
+#pragma comment(lib, "xaudio2.lib")
+
+// スピーカ一覧
 const unsigned long spk[] = {
 	KSAUDIO_SPEAKER_MONO,
 	KSAUDIO_SPEAKER_STEREO,
@@ -18,195 +20,128 @@ const unsigned long spk[] = {
 };
 
 // コンストラクタ
-Okdio::Okdio()
+Okdio::Okdio() : 
+	read(0), loop(false), end(true)
 {
-	Init();
-}
-
-// コンストラクタ
-Okdio::Okdio(const std::string& fileName, MixVoice* mix, const size_t& num)
-{
-	Init();
-	Load(fileName, mix, num);
-}
-
-// コンストラクタ
-Okdio::Okdio(const snd::Info& info, const std::vector<float>& data)
-{
-	Init();
-	CustomWave(info, data);
+	callback = std::make_unique<VoiceCallback>(this);
 }
 
 // デストラクタ
 Okdio::~Okdio()
 {
-	Stop();
-	voice->DestroyVoice();
-}
-
-// 初期化
-void Okdio::Init(void)
-{
-	back  = std::make_unique<VoiceCallback>(this);
-	read  = 0;
-	loop  = end = false;
+	if (voice != nullptr)
+	{
+		voice->DestroyVoice();
+		voice = nullptr;
+	}
 }
 
 // ソースボイス生成
-void Okdio::CreateVoice(void)
+long Okdio::CreateVoice(void)
 {
-	WAVEFORMATEXTENSIBLE desc{};
-	desc.Format.cbSize          = sizeof(WAVEFORMATEXTENSIBLE) - sizeof(WAVEFORMATEX);
-	desc.Format.nChannels       = Loader::Get().Info(name).channel;
-	desc.Format.nSamplesPerSec  = Loader::Get().Info(name).sample;
-	desc.Format.nBlockAlign     = sizeof(float) * desc.Format.nChannels;
-	desc.Format.wBitsPerSample  = sizeof(float) * 8;
-	desc.Format.nAvgBytesPerSec = desc.Format.nSamplesPerSec * desc.Format.nBlockAlign;
-	desc.Format.wFormatTag      = WAVE_FORMAT_EXTENSIBLE;
+	okmonn::Info info = Loader::Get().Info(name);
 
-	desc.dwChannelMask = spk[desc.Format.nChannels - 1];
-	desc.Samples.wValidBitsPerSample = desc.Format.wBitsPerSample;
-	desc.SubFormat = KSDATAFORMAT_SUBTYPE_IEEE_FLOAT;
+	WAVEFORMATEXTENSIBLE fmt{};
+	fmt.Format.cbSize          = sizeof(WAVEFORMATEXTENSIBLE) - sizeof(WAVEFORMATEX);
+	fmt.Format.nSamplesPerSec  = info.sample;
+	fmt.Format.wBitsPerSample  = info.bit;
+	fmt.Format.nChannels       = info.channel;
+	fmt.Format.nBlockAlign     = fmt.Format.nChannels * fmt.Format.wBitsPerSample / 8;
+	fmt.Format.nAvgBytesPerSec = fmt.Format.nSamplesPerSec * fmt.Format.nBlockAlign;
+	fmt.Format.wFormatTag      = WAVE_FORMAT_EXTENSIBLE;
 
-	auto hr = XAudio2::Get().Audio()->CreateSourceVoice(&voice, (WAVEFORMATEX*)(&desc), XAUDIO2_VOICE_USEFILTER, XAUDIO2_DEFAULT_FREQ_RATIO, &(*back));
-	_ASSERT(hr == S_OK);
+	fmt.dwChannelMask               = spk[fmt.Format.nChannels - 1];
+	fmt.Samples.wValidBitsPerSample = fmt.Format.wBitsPerSample;
+	fmt.SubFormat                   = KSDATAFORMAT_SUBTYPE_PCM;
+
+	return XAudio2::Get().Audio()->CreateSourceVoice(&voice, (WAVEFORMATEX*)& fmt, XAUDIO2_VOICE_USEFILTER, XAUDIO2_DEFAULT_FREQ_RATIO, &(*callback));
 }
 
 // 読み込み
-void Okdio::Load(const std::string& fileName, MixVoice* mix, const size_t& num)
+long Okdio::Load(const std::string& fileName)
 {
 	auto hr = Loader::Get().Load(fileName);
-	_ASSERT(hr == 0);
+	if (FAILED(hr))
+	{
+		return hr;
+	}
 
 	name = fileName;
+	hr = CreateVoice();
+	if (FAILED(hr))
+	{
+		okmonn::DebugStream("ソースボイス生成：失敗");
+	}
 
-	CreateVoice();
-	SetMixVoice(mix, num);
-}
-
-// カスタム波形登録
-void Okdio::CustomWave(const snd::Info& info, const std::vector<float>& data)
-{
-	name = Loader::Get().Custom(info, data);
-	CreateVoice();
+	return hr;
 }
 
 // 再生
-void Okdio::Play(const bool& loop)
+long Okdio::Play(const bool& loop)
 {
 	auto hr = voice->Start();
-	_ASSERT(hr == S_OK);
+	if (FAILED(hr))
+	{
+		okmonn::DebugStream("再生開始：失敗");
+		return hr;
+	}
 
-	this->loop = loop;
+	this->loop = loop; 
 	end        = false;
+
+	return hr;
 }
 
 // 停止
-void Okdio::Stop(void)
+long Okdio::Stop(void)
 {
 	auto hr = voice->Stop(XAUDIO2_PLAY_TAILS);
-	_ASSERT(hr == S_OK);
+	if (FAILED(hr))
+	{
+		okmonn::DebugStream("再生停止：失敗");
+	}
+
+	return hr;
 }
 
-// 波形データをボイスバッファに追加
+// オーディオバッファに追加
 void Okdio::Submit(void)
 {
 	XAUDIO2_VOICE_STATE st{};
-	voice->GetState(&st, XAUDIO2_VOICE_NOSAMPLESPLAYED);
+	voice->GetState(&st);
 	if (st.BuffersQueued != 0)
 	{
 		return;
 	}
 
-	Loader& loader = Loader::Get();
-
-	//波形サイズ
-	size_t size = (read + loader.Size(name) > loader.DataSize(name))
-		? (read + loader.Size(name)) - loader.DataSize(name)
-		: loader.Size(name);
+	auto wave = Loader::Get().Wave(name);
+	size_t size = read + Loader::Get().ProcessSize(name) >= wave.lock()->size()
+		? (read + Loader::Get().ProcessSize(name)) - wave.lock()->size() : Loader::Get().ProcessSize(name);
 
 	XAUDIO2_BUFFER buf{};
-	buf.AudioBytes = unsigned int(sizeof(float) * size);
-	buf.pAudioData = (unsigned char*)&loader.Data(name).lock()->at(read);
-
+	buf.AudioBytes = sizeof(wave.lock()->at(0)) * size;
+	buf.pAudioData = (unsigned char*)&wave.lock()->at(read);
 	auto hr = voice->SubmitSourceBuffer(&buf);
-	_ASSERT(hr == S_OK);
+	if (FAILED(hr))
+	{
+		okmonn::DebugStream("オーディオバッファに追加：失敗");
+		return;
+	}
 
 	read += size;
 }
 
-// 終了確認
+// 終了チェック
 void Okdio::CheckEnd(void)
 {
-	if (read < Loader::Get().DataSize(name))
+	if (read >= Loader::Get().Wave(name).lock()->size())
 	{
-		return;
+		if (loop != true)
+		{
+			Stop();
+			end = true;
+		}
+
+		read = 0;
 	}
-
-	if (loop == false)
-	{
-		Stop();
-		end = true;
-	}
-
-	read = 0;
-}
-
-// ミックスボイスセット
-void Okdio::SetMixVoice(MixVoice* mix, const size_t& num)
-{
-	if (mix == nullptr)
-	{
-		return;
-	}
-
-	std::vector<XAUDIO2_SEND_DESCRIPTOR>desc(num);
-	for (size_t i = 0; i < num; ++i)
-	{
-		desc[i] = mix[i].GetSend();
-	}
-
-	XAUDIO2_VOICE_SENDS send{ unsigned __int32(num), desc.data() };
-
-	auto hr = voice->SetOutputVoices(&send);
-	_ASSERT(hr == S_OK);
-}
-
-// 再生速度調節
-bool Okdio::SetSpeed(const float& rate)
-{
-	if (!(rate > XAUDIO2_MIN_FREQ_RATIO && rate <= XAUDIO2_DEFAULT_FREQ_RATIO))
-	{
-		return false;
-	}
-
-	auto hr = voice->SetFrequencyRatio(rate);
-	_ASSERT(hr == S_OK);
-
-	return true;
-}
-
-// 登録名取得
-std::string Okdio::Name(void) const
-{
-	return name;
-}
-
-// 読み込み位置取得
-size_t& Okdio::Read(void)
-{
-	return read;
-}
-
-// 代入演算子オーバーロード
-void Okdio::operator=(const Okdio& okdio)
-{
-	if (okdio.voice == nullptr)
-	{
-		return;
-	}
-
-	Init();
-	name = okdio.name;
-	CreateVoice();
 }

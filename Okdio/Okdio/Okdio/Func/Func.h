@@ -1,22 +1,21 @@
 #pragma once
 #include <string>
-#include <vector>
 
-namespace snd
+struct _GUID;
+typedef _GUID GUID;
+class Okdio;
+
+namespace okmonn
 {
-	// 文字コード変換
-	std::wstring ChangeCode(const std::string& code);
-	std::string ChangeCode(const std::wstring& code);
+	// デバッグ出力
+	void DebugStream(const std::string& str);
 
-	// 円周率
-	float PI(void);
+	// エンジン開始
+	bool EnginStart(void);
 
-	// ラジアン変換
-	float Rad(const float& angle);
+	// オブジェクト生成
+	long CreateObj(const GUID& id, void** obj);
 
-	// ハミング窓
-	float Haminng(const unsigned int& i, const size_t& num);
-
-	// 波形データの削除
-	void Delete(const std::string& fileName);
+	// エンジン終了
+	void EnginEnd(void);
 }
