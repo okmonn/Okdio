@@ -11,7 +11,7 @@ namespace okmonn
 	void DebugStream(const std::string& str);
 
 	// エンジン開始
-	bool EnginStart(void);
+	long EnginStart(void);
 
 	// エンジン終了
 	void EnginEnd(void);

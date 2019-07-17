@@ -31,6 +31,9 @@
     <Filter Include="Manager">
       <UniqueIdentifier>{ccc83195-d501-423e-8d15-8b3ffeafc475}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MixVoice">
+      <UniqueIdentifier>{33371627-a1eb-4c0f-b46a-02a6c4766976}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -50,6 +53,9 @@
     </ClCompile>
     <ClCompile Include="Okdio\Manager\Manager.cpp">
       <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Okdio\MixVoice\MixVoice.cpp">
+      <Filter>MixVoice</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -85,6 +91,9 @@
     </ClInclude>
     <ClInclude Include="Okdio\Manager\Manager.h">
       <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Okdio\MixVoice\MixVoice.h">
+      <Filter>MixVoice</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

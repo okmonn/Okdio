@@ -77,6 +77,30 @@ long Okdio::Load(const std::string& fileName)
 	return hr;
 }
 
+// ミックスボイスセット
+long Okdio::SetMixVoice(MixVoice* mix, const size_t& num)
+{
+	if (mix != nullptr)
+	{
+		std::vector<XAUDIO2_SEND_DESCRIPTOR>desc(num);
+		for (size_t i = 0; i < num; ++i)
+		{
+			desc[i] = mix[i].Send();
+		}
+
+		XAUDIO2_VOICE_SENDS send{ unsigned __int32(num), desc.data() };
+		auto hr = voice->SetOutputVoices(&send);
+		if (FAILED(hr))
+		{
+			okmonn::DebugStream("送信先ミックスボイスのセット：失敗");
+		}
+
+		return hr;
+	}
+
+	return E_INVALIDARG;
+}
+
 // 再生
 long Okdio::Play(const bool& loop)
 {

@@ -1,12 +1,12 @@
 #pragma once
-#include "etc/Voice.h"
+#include "MixVoice/MixVoice.h"
 #include "Func/Func.h"
 #include <memory>
 
 class VoiceCallback;
 class Manager;
 
-class __declspec(uuid("C1FFFB4C-EC30-49DF-84ED-FD90BC1FC2AA"))
+class __declspec(uuid("00000000-0917-0917-0917-000000000001"))
 Okdio : public Voice<Okdio, IXAudio2SourceVoice>
 {
 	friend Voice<Okdio, IXAudio2SourceVoice>;
@@ -15,6 +15,9 @@ Okdio : public Voice<Okdio, IXAudio2SourceVoice>
 public:
 	// 読み込み
 	long Load(const std::string& fileName);
+
+	// ミックスボイスセット
+	long SetMixVoice(MixVoice* mix, const size_t& num);
 
 	// 再生
 	long Play(const bool& loop = false);

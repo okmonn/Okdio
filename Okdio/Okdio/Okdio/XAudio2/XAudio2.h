@@ -10,7 +10,7 @@ class XAudio2 :
 	friend Singleton<XAudio2>;
 public:
 	// äJén
-	bool EnginStart(void);
+	long EnginStart(void);
 
 	// èIóπ
 	void EnginEnd(void);

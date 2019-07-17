@@ -32,17 +32,19 @@ long XAudio2::CreateMastering(void)
 }
 
 // 開始
-bool XAudio2::EnginStart(void)
+long XAudio2::EnginStart(void)
 {
-	if (FAILED(CreateAudio()))
+	auto hr = CreateAudio();
+	if (FAILED(hr))
 	{
 		okmonn::DebugStream("XAudio2の生成：失敗");
-		return false;
+		return hr;
 	}
-	if (FAILED(CreateMastering()))
+	hr = CreateMastering();
+	if (FAILED(hr))
 	{
 		okmonn::DebugStream("マスタリングボイスの生成：失敗");
-		return false;
+		return hr;
 	}
 
 #ifdef _DEBUG
@@ -52,7 +54,7 @@ bool XAudio2::EnginStart(void)
 	audio->SetDebugConfiguration(&debug);
 #endif
 	
-	return true;
+	return hr;
 }
 
 // 終了

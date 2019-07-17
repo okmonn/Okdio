@@ -15,7 +15,7 @@ void okmonn::DebugStream(const std::string& str)
 }
 
 // エンジン開始
-bool okmonn::EnginStart(void)
+long okmonn::EnginStart(void)
 {
 	return XAudio2::Get().EnginStart();
 }
