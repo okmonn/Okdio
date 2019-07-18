@@ -170,3 +170,9 @@ void Okdio::CheckEnd(void)
 		read = 0;
 	}
 }
+
+// I—¹ƒtƒ‰ƒOæ“¾
+bool Okdio::IsPlayEnd(void) const
+{
+	return end;
+}
