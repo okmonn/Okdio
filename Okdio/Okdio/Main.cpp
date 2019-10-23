@@ -16,7 +16,7 @@ int main()
 		return 0;
 	}
 
-	okdio->Load("INSIDE.wav");
+	okdio->Load("Demo1.wav");
 	okdio->Play(true);
 
 	float volume = 1.0f;

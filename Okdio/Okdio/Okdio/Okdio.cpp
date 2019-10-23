@@ -143,9 +143,21 @@ void Okdio::Submit(void)
 	size_t size = read + Loader::Get().ProcessSize(name) > wave.lock()->size()
 		? (read + Loader::Get().ProcessSize(name)) - wave.lock()->size() : Loader::Get().ProcessSize(name);
 
+	unsigned char* ptr = (unsigned char*)&wave.lock()->at(read);
+	std::vector<float>f(size);
+	for (size_t i = 0; i < f.size(); ++i)
+	{
+		f[i] = (float(ptr[i]) / float(0xff / 2)) - 1.0f;
+	}
+	static std::vector<unsigned char>s(size);
+	for (size_t i = 0; i < s.size(); ++i)
+	{
+		s[i] = std::round((f[i] + 1.0f) * float(0xff / 2));
+	}
+
 	XAUDIO2_BUFFER buf{};
 	buf.AudioBytes = unsigned __int32(sizeof(wave.lock()->at(0)) * size);
-	buf.pAudioData = (unsigned char*)&wave.lock()->at(read);
+	buf.pAudioData = (unsigned char*)s.data();
 	auto hr = voice->SubmitSourceBuffer(&buf);
 	if (FAILED(hr))
 	{
